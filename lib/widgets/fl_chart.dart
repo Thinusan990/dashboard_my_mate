@@ -83,7 +83,7 @@ class _fl_chart extends State<fl_chart> {
       body: Center(
         child: Container(
           width: 300,
-          height: 250, // Increased the height to accommodate both text and chart
+          height: 200, // Increased the height to accommodate both text and chart
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(8),

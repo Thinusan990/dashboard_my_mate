@@ -1,3 +1,4 @@
+import 'package:dashboard_my_mate/widgets/calendar.dart';
 import 'package:dashboard_my_mate/widgets/donut_chart.dart';
 import 'package:dashboard_my_mate/widgets/fl_chart.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
@@ -10,17 +11,15 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Row(
           children: [
-            // Sidebar section
             Expanded(
-              flex: 2, // Adjusted flex for the sidebar width
+              flex: 2,
               child: Container(
                 color: Color(0xFF555555),
-                child: SidebarLayout(), // Sidebar widget
+                child: SidebarLayout(),
               ),
             ),
-
             Expanded(
-              flex: 7,
+              flex: 8,
               child: Container(
                 color: Colors.white,
                 child: Column(
@@ -36,17 +35,17 @@ class HomeScreen extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-
                                   Expanded(
-                                    child: fl_chart(),
-                                  ),
+                                    child: Center(
+                                      child: fl_chart(),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
                           ),
-
                           Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Container(
                               color: Colors.grey[100],
                               child: Center(
@@ -57,21 +56,49 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     Expanded(
                       flex: 1,
                       child: Container(
-                        color: Colors.green[100], // Graph 2 container
+                        color: Colors.green[100],
                         child: Center(),
                       ),
                     ),
-
-                    // Third graph section
                     Expanded(
-                      flex: 1, // 1/3 of the remaining height
+                      flex: 2,
                       child: Container(
-                        color: Colors.orange[100], // Graph 3 container
-                        child: Center(),
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                color: Colors.white,
+                                child: Calendar(),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                color: Colors.blue[100],
+                                child: Center(
+                                  child: Text('Column 1',
+                                      style: TextStyle(fontSize: 18)),
+                                ),
+                              ),
+                            ),
+                            // Third column (empty placeholder)
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                color: Colors.orange[100], // Placeholder color
+                                child: Center(
+                                  child: Text('Column 3',
+                                      style: TextStyle(fontSize: 18)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

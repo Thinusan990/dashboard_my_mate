@@ -38,6 +38,8 @@ dependencies:
   firebase_core: ^2.31.0
   cloud_firestore: ^4.17.3
   fl_chart: ^0.69.0
+  table_calendar: ^3.0.4
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:
