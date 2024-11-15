@@ -19,14 +19,12 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-
             Expanded(
               flex: 7,
               child: Container(
                 color: Colors.white,
                 child: Column(
                   children: [
-
                     Expanded(
                       flex: 1,
                       child: Row(
@@ -34,12 +32,19 @@ class HomeScreen extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: Container(
-                              color: Colors.blue[100],
-                              child: Center(
-                                child: fl_chart(),
+                              color: Colors.grey[300],
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+
+                                  Expanded(
+                                    child: fl_chart(),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
+
                           Expanded(
                             flex: 1,
                             child: Container(
@@ -57,9 +62,7 @@ class HomeScreen extends StatelessWidget {
                       flex: 1,
                       child: Container(
                         color: Colors.green[100], // Graph 2 container
-                        child: Center(
-
-                        ),
+                        child: Center(),
                       ),
                     ),
 
@@ -68,9 +71,7 @@ class HomeScreen extends StatelessWidget {
                       flex: 1, // 1/3 of the remaining height
                       child: Container(
                         color: Colors.orange[100], // Graph 3 container
-                        child: Center(
-
-                        ),
+                        child: Center(),
                       ),
                     ),
                   ],
