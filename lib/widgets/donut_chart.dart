@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -8,83 +7,140 @@ class DonutChart extends StatefulWidget {
 }
 
 class _DonutChartState extends State<DonutChart> {
-  Map<String, int> userTypeCounts = {};
+  // User type data
+  final Map<String, int> userTypeCounts = {
+    'basic': 50,
+    'standard': 30,
+    'premium': 20,
+    'unsubscribed': 40,
+  };
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserTypeData();
-  }
-
-  Future<void> _fetchUserTypeData() async {
-    final snapshot = await FirebaseFirestore.instance.collection('clients').get();
-
-    Map<String, int> counts = {};
-    for (var doc in snapshot.docs) {
-      String userType = doc['user type'];
-      counts[userType] = (counts[userType] ?? 0) + 1;
-    }
-
-    setState(() {
-      userTypeCounts = counts;
-    });
-  }
-
+  // Generate pie chart data
   List<PieChartSectionData> _generateChartData() {
     final total = userTypeCounts.values.fold(0, (sum, count) => sum + count);
+
     return userTypeCounts.entries.map((entry) {
-      final percentage = (entry.value / total) * 100;
       return PieChartSectionData(
-
         color: _getColorForUserType(entry.key),
-
-        radius: 8,
-        titleStyle: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
+        radius: 10,
       );
     }).toList();
   }
 
-  Color _getColorForUserType(String userType) {
-    // Define colors for each user type
+  // Get colors for each user type
+  Color? _getColorForUserType(String userType) {
     switch (userType) {
       case 'basic':
-        return Color(0xFF5D5858);
+        return Colors.grey[400];
       case 'standard':
-        return Color(0x3B3A3AFF);
+        return Colors.grey[600];
       case 'premium':
-        return Color(0x1FF181718);
+        return Colors.grey[900];
+      case 'unsubscribed':
+        return Colors.grey[100];
       default:
-        return Color(0x424040FF);
+        return Colors.grey;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Calculate total subscribers
+    final totalSubscribers = userTypeCounts['basic']! +
+        userTypeCounts['standard']! +
+        userTypeCounts['premium']!;
+    final totalUsers = userTypeCounts.values.fold(0, (sum, count) => sum + count);
+    final subscribedPercentage = (totalSubscribers / totalUsers) * 100;
+
     return Scaffold(
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: userTypeCounts.isNotEmpty
-              ? PieChart(
-            PieChartData(
-              sections: _generateChartData(),
-              centerSpaceRadius: 40,
-              sectionsSpace: 2,
-              borderData: FlBorderData(show: false),
-              pieTouchData: PieTouchData(
-                touchCallback: (FlTouchEvent event, pieTouchResponse) {
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Deduce container size
 
-                },
+
+            return Container(
+              width: 350,
+              height: 200,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1.5,
+                ),
               ),
-            ),
-          )
-              : CircularProgressIndicator(), // Show a loader until data is available
-        ),
-      ),
+              child: Stack(
+                children: [
+                  // Donut Chart
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      width: 200,
+                      height: 150,
+                      child: PieChart(
+                        PieChartData(
+                          sections: _generateChartData(),
+                          centerSpaceRadius: 50,
+                          sectionsSpace: 4,
+                          borderData: FlBorderData(show: false),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Percentage in the center of the graph
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      width: 200,
+                      height: 150,
+                      child: Center(
+                        child: Text(
+                          '${subscribedPercentage.toStringAsFixed(1)}%',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Subscribers text (Aligned similar to the graph)
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '$totalSubscribers',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          'Subscribers',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+    ),
+    ),
     );
   }
-}
+  }

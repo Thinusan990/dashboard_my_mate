@@ -37,97 +37,100 @@ class _Calendar extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 250,
-      height: 350,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[600],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Stack(
-          children: [
-            TableCalendar(
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: _focusedDay,
-              selectedDayPredicate: (day) {
-                return isSameDay(_selectedDay, day);
-              },
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              },
-              onPageChanged: (focusedDay) {
-                setState(() {
-                  _focusedDay = focusedDay;
-                });
-              },
+      width: 180,
+      height: 500,
+      child: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[600],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Stack(
+            children: [
+              TableCalendar(
+                firstDay: DateTime.utc(2010, 10, 16),
+                lastDay: DateTime.utc(2030, 3, 14),
+                focusedDay: _focusedDay,
+                selectedDayPredicate: (day) {
+                  return isSameDay(_selectedDay, day);
+                },
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                },
+                onPageChanged: (focusedDay) {
+                  setState(() {
+                    _focusedDay = focusedDay;
+                  });
+                },
 
-              daysOfWeekStyle: DaysOfWeekStyle(
-                weekdayStyle: TextStyle(
-                  fontSize: 10,
-                  color: Colors.black,
-                ),
-                weekendStyle: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white,
-                ),
-              ),
-              calendarStyle: CalendarStyle(
-                defaultTextStyle: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white,
-                ),
-                weekendTextStyle: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white,
-                ),
-                todayTextStyle: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                todayDecoration: BoxDecoration(
-                  color: Colors.transparent,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 1),
-                ),
-                selectedTextStyle: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white,
-                ),
-              ),
-              headerStyle: HeaderStyle(
-                titleTextStyle: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-                formatButtonVisible: false,
-                titleCentered: true,
-              ),
-            ),
-            Positioned(
-              right: 8,
-              top: 8,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  _currentTime,
-                  style: TextStyle(
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(
+                    fontSize: 8,
+                    color: Colors.black,
+                  ),
+                  weekendStyle: TextStyle(
+                    fontSize: 8,
                     color: Colors.white,
+                  ),
+                ),
+
+                calendarStyle: CalendarStyle(
+                  defaultTextStyle: TextStyle(
+                    fontSize: 8,
+                    color: Colors.white,
+                  ),
+                  weekendTextStyle: TextStyle(
+                    fontSize: 8,
+                    color: Colors.white,
+                  ),
+                  todayTextStyle: TextStyle(
+                    fontSize: 8,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  todayDecoration: BoxDecoration(
+                    color: Colors.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 1),
+                  ),
+                  selectedTextStyle: TextStyle(
+                    fontSize: 8,
+                    color: Colors.white,
+                  ),
+                ),
+                headerStyle: HeaderStyle(
+                  titleTextStyle: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                   ),
+                  formatButtonVisible: false,
+                  titleCentered: true,
                 ),
               ),
-            ),
-          ],
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _currentTime,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

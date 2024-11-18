@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dashboard_my_mate/MyMateThemes.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -83,9 +84,9 @@ class _fl_chart extends State<fl_chart> {
       body: Center(
         child: Container(
           width: 300,
-          height: 200, // Increased the height to accommodate both text and chart
+          height: 200,
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color:MyMateThemes.backgroundColor,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
@@ -98,10 +99,10 @@ class _fl_chart extends State<fl_chart> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10), // Add some space between text and chart
+              SizedBox(height: 10),
               Container(
                 width: double.infinity,
-                height: 150, // Height of the chart container
+                height: 150,
                 child: BarChart(
                   BarChartData(
                     alignment: BarChartAlignment.spaceAround,

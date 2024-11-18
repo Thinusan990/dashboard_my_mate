@@ -1,6 +1,7 @@
 import 'package:dashboard_my_mate/widgets/calendar.dart';
 import 'package:dashboard_my_mate/widgets/donut_chart.dart';
 import 'package:dashboard_my_mate/widgets/fl_chart.dart';
+import 'package:dashboard_my_mate/widgets/multiplepichart.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:flutter/material.dart';
 
@@ -56,15 +57,37 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+
+
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        color: Colors.green[100],
-                        child: Center(),
+                      child: Row(
+                        children: [
+                          // First column in the second row (empty for now)
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              color: Colors.white,
+                              child: Center(
+
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              color: Colors.grey[100],
+                              child: Center(
+                                child: multiplepichart(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
                     Expanded(
-                      flex: 2,
+                      flex: 1,
                       child: Container(
                         color: Colors.white,
                         child: Row(
@@ -79,10 +102,9 @@ class HomeScreen extends StatelessWidget {
                             Expanded(
                               flex: 1,
                               child: Container(
-                                color: Colors.blue[100],
+                                color: Colors.white,
                                 child: Center(
-                                  child: Text('Column 1',
-                                      style: TextStyle(fontSize: 18)),
+
                                 ),
                               ),
                             ),
@@ -90,10 +112,9 @@ class HomeScreen extends StatelessWidget {
                             Expanded(
                               flex: 1,
                               child: Container(
-                                color: Colors.orange[100], // Placeholder color
+                                color: Colors.white, // Placeholder color
                                 child: Center(
-                                  child: Text('Column 3',
-                                      style: TextStyle(fontSize: 18)),
+
                                 ),
                               ),
                             ),
