@@ -15,14 +15,14 @@ class HomeScreen extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Container(
                 color: Color(0xFF555555),
                 child: SidebarLayout(),
               ),
             ),
             Expanded(
-              flex: 8,
+              flex: 4,
               child: Container(
                 color: Colors.white,
                 child: Column(
@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           Expanded(
-                            flex: 2,
+                            flex: 4,
                             child: Container(
                               color: Colors.grey[100],
                               child: Center(

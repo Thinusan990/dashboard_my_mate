@@ -101,7 +101,7 @@ class _fl_chart extends State<fl_chart> {
               ),
               SizedBox(height: 10),
               Container(
-                width: double.infinity,
+                width: 450,
                 height: 150,
                 child: BarChart(
                   BarChartData(

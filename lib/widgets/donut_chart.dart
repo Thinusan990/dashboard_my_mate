@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class DonutChart extends StatefulWidget {
+  final bool showPercentage;
+
+  DonutChart({this.showPercentage = true});
+
   @override
   _DonutChartState createState() => _DonutChartState();
 }
@@ -94,6 +98,7 @@ class _DonutChartState extends State<DonutChart> {
                   ),
 
                   // Percentage in the center of the graph
+                  if (widget.showPercentage)
                   Align(
                     alignment: Alignment.centerRight,
                     child: SizedBox(
