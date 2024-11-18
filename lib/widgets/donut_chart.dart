@@ -20,9 +20,12 @@ class _DonutChartState extends State<DonutChart> {
     final total = userTypeCounts.values.fold(0, (sum, count) => sum + count);
 
     return userTypeCounts.entries.map((entry) {
+      final value = entry.value.toDouble();
       return PieChartSectionData(
         color: _getColorForUserType(entry.key),
+        value: value,
         radius: 10,
+        showTitle: false,
       );
     }).toList();
   }
@@ -37,7 +40,7 @@ class _DonutChartState extends State<DonutChart> {
       case 'premium':
         return Colors.grey[900];
       case 'unsubscribed':
-        return Colors.grey[100];
+        return Colors.grey[300];
       default:
         return Colors.grey;
     }
@@ -83,7 +86,7 @@ class _DonutChartState extends State<DonutChart> {
                         PieChartData(
                           sections: _generateChartData(),
                           centerSpaceRadius: 50,
-                          sectionsSpace: 4,
+                          sectionsSpace: 0,
                           borderData: FlBorderData(show: false),
                         ),
                       ),

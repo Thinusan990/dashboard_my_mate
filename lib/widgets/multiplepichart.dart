@@ -8,9 +8,9 @@ class multiplepichart extends StatefulWidget {
 
 class _multiplepichartState extends State<multiplepichart> {
   final Map<String, Map<String, int>> userTypeData = {
-    'basic': {'boys': 60, 'girls': 55},
+    'basic': {'boys': 100, 'girls': 55},
     'standard': {'boys': 50, 'girls': 45},
-    'premium': {'boys': 40, 'girls': 38},
+    'premium': {'boys': 40, 'girls': 78},
   };
 
   @override
@@ -24,16 +24,16 @@ class _multiplepichartState extends State<multiplepichart> {
       body: Center(
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.grey[200], // Grey background
-            borderRadius: BorderRadius.circular(16), // Rounded corners
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: Colors.grey[400]!,
               width: 1.5,
             ),
           ),
-          padding: EdgeInsets.all(12), // Padding for the container
+          padding: EdgeInsets.all(12),
           child: Row(
-            mainAxisSize: MainAxisSize.min, // Ensures the row takes only the space needed by its children
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildDonutChart(
@@ -41,13 +41,13 @@ class _multiplepichartState extends State<multiplepichart> {
                 boys: userTypeData['basic']!['boys']!,
                 girls: userTypeData['basic']!['girls']!,
               ),
-              SizedBox(width: 8), // Reduced gap between the charts
+              SizedBox(width: 8),
               _buildDonutChart(
                 title: "Standard",
                 boys: userTypeData['standard']!['boys']!,
                 girls: userTypeData['standard']!['girls']!,
               ),
-              SizedBox(width: 8), // Reduced gap between the charts
+              SizedBox(width: 8),
               _buildDonutChart(
                 title: "Premium",
                 boys: userTypeData['premium']!['boys']!,
@@ -68,13 +68,13 @@ class _multiplepichartState extends State<multiplepichart> {
     final total = boys + girls;
 
     return Container(
-      padding: EdgeInsets.all(8), // Padding for individual chart containers
+      padding: EdgeInsets.all(8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             height: 100,
-            width: 120,
+            width: 220,
             child: Stack(
               children: [
                 PieChart(

@@ -1,8 +1,10 @@
+import 'package:dashboard_my_mate/widgets/api_users.dart';
 import 'package:dashboard_my_mate/widgets/calendar.dart';
 import 'package:dashboard_my_mate/widgets/donut_chart.dart';
 import 'package:dashboard_my_mate/widgets/fl_chart.dart';
 import 'package:dashboard_my_mate/widgets/multiplepichart.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
+import 'package:dashboard_my_mate/widgets/userstatics.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -69,10 +71,11 @@ class HomeScreen extends StatelessWidget {
                             child: Container(
                               color: Colors.white,
                               child: Center(
-
+                                child: UserStatistics(),
+                              ),
                               ),
                             ),
-                          ),
+
                           Expanded(
                             flex: 2,
                             child: Container(
@@ -88,6 +91,7 @@ class HomeScreen extends StatelessWidget {
 
                     Expanded(
                       flex: 1,
+
                       child: Container(
                         color: Colors.white,
                         child: Row(
@@ -101,19 +105,24 @@ class HomeScreen extends StatelessWidget {
                             ),
                             Expanded(
                               flex: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
                               child: Container(
-                                color: Colors.white,
-                                child: Center(
-
-                                ),
+                                width: 10,
+                                height: 250,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(12)
+                                )
+                              ),
                               ),
                             ),
-                            // Third column (empty placeholder)
                             Expanded(
                               flex: 1,
                               child: Container(
-                                color: Colors.white, // Placeholder color
+                                color: Colors.white,
                                 child: Center(
+                                  child: ApiUsers(),
 
                                 ),
                               ),
