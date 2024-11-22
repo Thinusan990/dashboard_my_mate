@@ -29,7 +29,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
             ),
           ),
 
-          _buildSidebarItem("Home", 16, () {
+          _buildSidebarItem(Icons.home,"Home", 16, () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -37,7 +37,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
 
           }),
           _buildManageUserTile(),
-          _buildSidebarItem("Tokens", 16, () {
+          _buildSidebarItem(Icons.local_fire_department_outlined,"Tokens", 16, () {
             {
               Navigator.push(
                 context,
@@ -46,7 +46,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
 
             }
           }),
-          _buildSidebarItem("Statistics", 16, () {
+          _buildSidebarItem(Icons.trending_up_sharp,"Statistics", 16, () {
             {
               Navigator.push(
                 context,
@@ -54,7 +54,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
               );
             }
           }),
-          _buildSidebarItem("Support & Report", 16, () {
+          _buildSidebarItem(Icons.headset_mic,"Support & Report", 16, () {
             {
               Navigator.push(
                 context,
@@ -62,7 +62,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
               );
             }
           }),
-          _buildSidebarItem("Third Party Adds", 16, () {
+          _buildSidebarItem(Icons.ad_units,"Third Party Adds", 16, () {
             {
               Navigator.push(
                 context,
@@ -70,7 +70,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
               );
             }
           }),
-          _buildSidebarItem("Promo & Offers", 16, () {
+          _buildSidebarItem(Icons.local_offer_outlined,"Promo & Offers", 16, () {
             {
               Navigator.push(
                 context,
@@ -78,7 +78,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
               );
             }
           }),
-          _buildSidebarItem("Boosts", 16, () {
+          _buildSidebarItem(Icons.bolt,"Boosts",  16, () {
             {
               Navigator.push(
                 context,
@@ -91,8 +91,12 @@ class _SidebarLayoutState extends State<SidebarLayout> {
     );
   }
 
-  Widget _buildSidebarItem(String title, double fontSize, VoidCallback onTap) {
+  Widget _buildSidebarItem(IconData icon,String title, double fontSize, VoidCallback onTap) {
     return ListTile(
+      leading: Icon(
+        icon,
+        color: Colors.white,
+      ),
       title: Text(
         title,
         style: TextStyle(color: Colors.white, fontSize: fontSize),
@@ -103,9 +107,18 @@ class _SidebarLayoutState extends State<SidebarLayout> {
 
   Widget _buildManageUserTile() {
     return ExpansionTile(
-      title: Text(
-        'Manage User',
-        style: TextStyle(color: Colors.white),
+      title: Row(
+        children: [
+          Icon(
+            Icons.person, // User icon
+            color: Colors.white,
+          ),
+          SizedBox(width: 8), // Space between the icon and text
+          Text(
+            'Users',
+            style: TextStyle(color: Colors.white),
+          ),
+        ],
       ),
       trailing: Icon(
         isManageUserExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,

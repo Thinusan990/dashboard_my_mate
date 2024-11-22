@@ -8,7 +8,6 @@ class UserStatistics extends StatefulWidget {
 }
 
 class _UserStatisticsState extends State<UserStatistics> {
-  // Hardcoded data for the chart
   final Map<String, int> userTypeCounts = {
     'Active': 1879,
     'online': 273,
@@ -59,7 +58,7 @@ class _UserStatisticsState extends State<UserStatistics> {
 
           return Container(
             width: 350,
-            height: 240,
+            height: 220,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.grey[200],

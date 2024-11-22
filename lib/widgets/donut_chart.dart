@@ -63,7 +63,6 @@ class _DonutChartState extends State<DonutChart> {
       body: Center(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            // Deduce container size
 
 
             return Container(

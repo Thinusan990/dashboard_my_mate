@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               flex: 4,
               child: Container(
-                color: Colors.white,
+                color: Colors.grey[600],
                 child: Column(
                   children: [
                     Expanded(
@@ -32,9 +32,9 @@ class HomeScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            flex: 1,
+                            flex: 3,
                             child: Container(
-                              color: Colors.grey[300],
+                              color: Colors.grey[600],
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -59,13 +59,11 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
-
                     Expanded(
                       flex: 1,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          // First column in the second row (empty for now)
                           Expanded(
                             flex: 1,
                             child: Container(
@@ -73,9 +71,8 @@ class HomeScreen extends StatelessWidget {
                               child: Center(
                                 child: UserStatistics(),
                               ),
-                              ),
                             ),
-
+                          ),
                           Expanded(
                             flex: 2,
                             child: Container(
@@ -88,13 +85,16 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     Expanded(
                       flex: 1,
+                      // child: Padding(
+                      //   padding: const EdgeInsets.only(left: 10.0),
+                       child: Container(
 
-                      child: Container(
                         color: Colors.white,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+
                           children: [
                             Expanded(
                               flex: 1,
@@ -103,27 +103,36 @@ class HomeScreen extends StatelessWidget {
                                 child: Calendar(),
                               ),
                             ),
+
                             Expanded(
                               flex: 1,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                              child: Container(
-                                width: 10,
-                                height: 250,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(12)
-                                )
-                              ),
+                               child: Padding(
+                               padding: const EdgeInsets.only(left: 10.0),
+
+                                child: Container(
+                                    width: 100,
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius:
+                                            BorderRadius.circular(12),
+                                      border: Border.all(
+                                    color: Colors.grey,
+                                      width: 1.5,
+
+                                    ),
+                                    ),
+                                ),
                               ),
                             ),
+
+
                             Expanded(
                               flex: 1,
                               child: Container(
                                 color: Colors.white,
                                 child: Center(
                                   child: ApiUsers(),
-
                                 ),
                               ),
                             ),
@@ -131,6 +140,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+
                   ],
                 ),
               ),

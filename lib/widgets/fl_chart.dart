@@ -69,7 +69,7 @@ class _fl_chart extends State<fl_chart> {
             BarChartRodData(
               toY: (girlsData[day]?.toDouble() ?? 0),
               color: Colors.pink.withOpacity(0.7),
-              width: 8, // Width of the girls' bar
+              width: 8,
               borderRadius: BorderRadius.circular(4),
             ),
           ],
@@ -83,12 +83,15 @@ class _fl_chart extends State<fl_chart> {
     return Scaffold(
       body: Center(
         child: Container(
-          width: 300,
-          height: 200,
+          width: 400,
+          height: 220,
           decoration: BoxDecoration(
-            color:MyMateThemes.backgroundColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.5,
+              )),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -101,7 +104,7 @@ class _fl_chart extends State<fl_chart> {
               ),
               SizedBox(height: 10),
               Container(
-                width: 450,
+                width: 400,
                 height: 150,
                 child: BarChart(
                   BarChartData(
@@ -124,10 +127,19 @@ class _fl_chart extends State<fl_chart> {
                         sideTitles: SideTitles(
                           showTitles: true,
                           getTitlesWidget: (value, meta) {
-                            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                            const days = [
+                              'Mon',
+                              'Tue',
+                              'Wed',
+                              'Thu',
+                              'Fri',
+                              'Sat',
+                              'Sun'
+                            ];
                             return Text(
                               days[value.toInt()],
-                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 12),
                             );
                           },
                         ),
