@@ -25,7 +25,6 @@ class _subscriberschart extends State<subscriberschart> {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     final QuerySnapshot snapshot = await firestore.collection('clients').get();
 
-    // Reset counts
     Map<String, int> tempCounts = {
       'basic': 0,
       'standard': 0,
