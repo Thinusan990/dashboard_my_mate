@@ -76,6 +76,11 @@ class MyMatePage extends StatelessWidget {
                           ),
                         ],
                       ),
+                      SizedBox(height: 20),
+
+                  // Divider
+                  Divider(color: Colors.grey),
+                  SizedBox(height: 20),
                       // Action Buttons
                       Row(
                         children: [
