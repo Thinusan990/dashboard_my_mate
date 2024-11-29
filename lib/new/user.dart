@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'user_fullname.dart';
-
 
 void main() {
   runApp(MyMateApp());
@@ -92,11 +90,11 @@ class MyMatePage extends StatelessWidget {
                             child: Text('Send Message'),
                           ),
                           SizedBox(width: 10),
-                          _buildOutlinedButton("Suspend"),
+                          _buildOutlinedButton("Suspend", 75),
                           SizedBox(width: 10),
-                          _buildOutlinedButton("Delete"),
+                          _buildOutlinedButton("Delete", 47),
                           SizedBox(width: 10),
-                          _buildOutlinedButton("Ban"),
+                          _buildOutlinedButton("Ban", 50),
                         ],
                       ),
                     ],
@@ -135,7 +133,6 @@ class MyMatePage extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 20),
-                  UserFullNameWidget()
                 ],
               ),
             ),
@@ -194,15 +191,26 @@ class MyMatePage extends StatelessWidget {
     );
   }
 
-  Widget _buildOutlinedButton(String title) {
-    return OutlinedButton(
+ Widget _buildOutlinedButton(String title, double width) {
+  return Container(
+    width: width, // Set the width dynamically
+    height: 25,   // Set the fixed height
+    child: OutlinedButton(
       onPressed: () {},
       style: OutlinedButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: EdgeInsets.zero, 
+        side: BorderSide(color: Color(0xFFFF2626)), // Red border color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5), // Border radius of 5px
+        ),
       ),
-      child: Text(title),
-    );
-  }
+      child: Text(
+        title,
+        style: TextStyle(color: Color(0xFFFF2626), fontSize: 12), // Red text
+      ),
+    ),
+  );
+}
 
   Widget _buildTab(String title) {
     return Container(
