@@ -3,6 +3,9 @@ import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:dashboard_my_mate/widgets/subscriberschart.dart';
 import 'package:flutter/material.dart';
 
+import '../dbconnection/firebase.dart';
+import '../widgets/user_details.dart';
+
 class ManageUsers extends StatefulWidget {
   @override
   _ManageUsersState createState() => _ManageUsersState();
@@ -16,6 +19,13 @@ class _ManageUsersState extends State<ManageUsers> {
   int subscribedCount = 0;
   int unsubscribedCount = 0;
   Set<String> selectedRows = {};
+  final FirebaseService _firebaseService = FirebaseService();
+
+
+  List<Map<String, dynamic>> allUsers = [];
+  List<Map<String, dynamic>> displayedUsers = [];
+  int rowsPerPage = 5; // Number of rows per page
+  int currentPage = 0; // The current page index
 
   @override
   void initState() {
@@ -23,21 +33,34 @@ class _ManageUsersState extends State<ManageUsers> {
     _fetchCounts();
   }
 
+  Future<void> _updateUserStatus(Set<String> userIds, String newStatus) async {
+    try {
+      for (String userId in userIds) {
+        await _firebaseService.updateUser(userId, {'user type': newStatus});
+      }
+      setState(() {
+        selectedRows.clear();
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("User status updated to $newStatus")),
+      );
+      _fetchCounts();
+    } catch (e) {
+      print("Error updating user status: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error updating user status")),
+      );
+    }
+  }
+
   Future<void> _fetchCounts() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('clients').get();
-      final users = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-
+      final counts = await _firebaseService.fetchCounts();
       setState(() {
-        activeCount = users.where((user) => user['Active'] == true).length;
-        inactiveCount = users.where((user) => user['Active'] == false).length;
-        subscribedCount = users
-            .where((user) =>
-        user['user type'] == 'premium' ||
-            user['user type'] == 'basic' ||
-            user['user type'] == 'standard')
-            .length;
-        unsubscribedCount = users.length - subscribedCount;
+        activeCount = counts['active'] ?? 0;
+        inactiveCount = counts['inactive'] ?? 0;
+        subscribedCount = counts['subscribed'] ?? 0;
+        unsubscribedCount = counts['unsubscribed'] ?? 0;
       });
     } catch (e) {
       print('Error fetching counts: $e');
@@ -64,6 +87,25 @@ class _ManageUsersState extends State<ManageUsers> {
     }
   }
 
+  void _updateDisplayedUsers(){
+    int startIndex = currentPage * rowsPerPage;
+    int endIndex = startIndex + rowsPerPage;
+
+    setState(() {
+      displayedUsers = allUsers.sublist(startIndex,
+      endIndex > allUsers.length ? allUsers.length : endIndex,
+      );
+    });
+  }
+
+  void _changepage(int pageIndex) {
+    setState(() {
+      currentPage = pageIndex;
+      _updateDisplayedUsers();
+    });
+  }
+
+
   Color _getStatusColor(String userType) {
     switch (userType.toLowerCase()) {
       case 'premium':
@@ -79,8 +121,9 @@ class _ManageUsersState extends State<ManageUsers> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    int totalPages = (allUsers.length / rowsPerPage).ceil();
 
+    return Scaffold(
       body: SafeArea(
         child: Row(
           children: [
@@ -93,24 +136,20 @@ class _ManageUsersState extends State<ManageUsers> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-
                   crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                Container(
-                  height: 20,
-                margin: const EdgeInsets.only(bottom: 16),
-                child: Text(
-                  'Users',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-
+                  children: [
+                    Container(
+                      height: 20,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        'Users',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     Container(
                       height: 40,
                       decoration: BoxDecoration(
-
                         border: Border(
-
                           top: BorderSide(color: Colors.grey, width: 1.0),
                           bottom: BorderSide(color: Colors.grey, width: 1.0),
                         ),
@@ -132,7 +171,13 @@ class _ManageUsersState extends State<ManageUsers> {
                                 icon: Icon(Icons.settings),
                                 label: Text('Settings'),
                               ),
-                              SizedBox(width: 4,height: 5,),
+                              Container(
+                                width: 1, // Width of the vertical border
+                                height: 30, // Adjustable height
+                                margin: EdgeInsets.symmetric(horizontal: 8),
+                                color: Colors.grey, // Border color
+                              ),
+                              SizedBox(width: 4, height: 5),
                               SizedBox(
                                 width: 200,
                                 child: TextField(
@@ -148,8 +193,7 @@ class _ManageUsersState extends State<ManageUsers> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16.0),
                                     ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 8),
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                                   ),
                                 ),
                               ),
@@ -165,21 +209,24 @@ class _ManageUsersState extends State<ManageUsers> {
                           bottom: BorderSide(color: Colors.grey, width: 1.0),
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 1.0),
+                      padding: const EdgeInsets.symmetric(vertical: 2.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildCountButton('Active', activeCount, Colors.grey),
-                          _buildCountButton(
-                              'Inactive', inactiveCount, Colors.grey),
-                          _buildCountButton(
-                              'Subscribed', subscribedCount, Colors.grey),
-                          _buildCountButton(
-                              'Unsubscribed', unsubscribedCount, Colors.grey),
-                          _buildCountButton('Suspended', 123, Colors.grey),
-                          _buildCountButton('Banned', 123, Colors.grey),
-                          _buildCountButton('New User', 123, Colors.grey),
+                          _buildCountButton('Active', activeCount, Colors.black),
+                          _buildCountButton('Inactive', inactiveCount, Colors.black),
+                          _buildCountButton('Subscribed', subscribedCount, Colors.black),
+                          _buildCountButton('Unsubscribed', unsubscribedCount, Colors.black),
+                          _buildCountButton('Suspended', 123, Colors.black),
+                          _buildCountButton('Banned', 123, Colors.black),
+                          _buildCountButton('New User', 123, Colors.black),
                           Spacer(),
+                          Container(
+                            width: 1,
+                            height: 30,
+                            margin: EdgeInsets.symmetric(horizontal: 12),
+                            color: Colors.grey,
+                          ),
                           SizedBox(
                             width: 200,
                             child: ElevatedButton.icon(
@@ -191,38 +238,55 @@ class _ManageUsersState extends State<ManageUsers> {
                         ],
                       ),
                     ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ElevatedButton(
-                            onPressed:selectedRows.isNotEmpty?
-                                () {
-
-                                }:null,
-                            child: Text('Delete'),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ElevatedButton(
+                          onPressed: selectedRows.isNotEmpty ? () {} : null,
+                          child: Text('Delete'),
+                        ),
+                        ElevatedButton(
+                          onPressed: selectedRows.isNotEmpty ? () {} : null,
+                          child: Text('Add To'),
+                        ),
+                        ElevatedButton(
+                          onPressed: selectedRows.isNotEmpty ? () {} : null,
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(1, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
-                          ElevatedButton(
-                            onPressed:selectedRows.isNotEmpty?
-                                () {
-
-                            }:null,
-                            child: Text('Add To'),
+                          child: DropdownButton<String>(
+                            hint: Text(
+                              "Change Status",
+                              style: TextStyle(fontSize: 16, color: selectedRows.isNotEmpty ? Colors.deepPurple : Colors.grey),
+                            ),
+                            underline: SizedBox(),
+                            onChanged: selectedRows.isNotEmpty
+                                ? (value) async {
+                              if (value != null) {
+                                await _updateUserStatus(selectedRows, value);
+                              }
+                            }
+                                : null,
+                            items: ["Basic", "Standard", "Premium", "Unsubscribed"]
+                                .map(
+                                  (status) => DropdownMenuItem<String>(
+                                value: status.toLowerCase(),
+                                child: Text(status),
+                              ),
+                            )
+                                .toList(),
                           ),
-                          ElevatedButton(
-                            onPressed:selectedRows.isNotEmpty?
-                                () {
-
-                            }:null,
-                            child: Text('Change Status'),
-                          ),
-                        ],
-                      ),
-                    SizedBox(height: 40),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 30),
                     Expanded(
                       child: Row(
                         children: [
-                          // User table
                           Expanded(
                             flex: 2,
                             child: Container(
@@ -242,18 +306,14 @@ class _ManageUsersState extends State<ManageUsers> {
                                     return Center(child: Text('No users found'));
                                   } else {
                                     final users = snapshot.data!
-                                        .where((user) => user['full_name']
-                                        .toLowerCase()
-                                        .contains(searchQuery))
+                                        .where((user) => user['full_name'].toLowerCase().contains(searchQuery))
                                         .toList();
-
                                     return SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: DataTable(
                                         headingRowHeight: 50,
                                         dataRowHeight: 40,
                                         columns: [
-
                                           DataColumn(label: Text('Username')),
                                           DataColumn(label: Text('Status')),
                                           DataColumn(label: Text('Rank No')),
@@ -263,7 +323,6 @@ class _ManageUsersState extends State<ManageUsers> {
                                         rows: users.map((user) {
                                           final userTypeColor = _getStatusColor(user['user_type']);
                                           final isSelected = selectedRows.contains(user['id']);
-
                                           return DataRow(
                                             selected: isSelected,
                                             onSelectChanged: (selected) {
@@ -276,17 +335,26 @@ class _ManageUsersState extends State<ManageUsers> {
                                               });
                                             },
                                             cells: [
-
-                                              DataCell(Text(user['full_name'])),
+                                              DataCell(
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    // Navigate to the user details page
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => UserdetailsWidget(userId: user['id'] as String),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Text(user['full_name']),
+                                                ),
+                                              ),
                                               DataCell(
                                                 Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 6),
+                                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                                   decoration: BoxDecoration(
                                                     color: userTypeColor.withOpacity(0.2),
-                                                    border: Border.all(
-                                                        color: userTypeColor, width: 0.5),
+                                                    border: Border.all(color: userTypeColor, width: 0.5),
                                                     borderRadius: BorderRadius.circular(20),
                                                   ),
                                                   child: Text(
@@ -310,20 +378,20 @@ class _ManageUsersState extends State<ManageUsers> {
                                           );
                                         }).toList(),
                                       ),
-                                    );
+
+
+
+                                  );
+
                                   }
                                 },
                               ),
                             ),
                           ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            flex: 1,
-                            child: subscriberschart(),
-                          ),
+                          Expanded(flex: 1, child: Subscriberschart()),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -337,17 +405,7 @@ class _ManageUsersState extends State<ManageUsers> {
   Widget _buildCountButton(String label, int count, Color color) {
     return ElevatedButton(
       onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        backgroundColor: color,
-      ),
-      child: Column(
-        children: [
-          Text(label),
-          SizedBox(height: 1),
-          Text(count.toString()),
-        ],
-      ),
+      child: Text('$label ($count)', style: TextStyle(color: color)),
     );
   }
 }
