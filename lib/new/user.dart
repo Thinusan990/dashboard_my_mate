@@ -1,233 +1,383 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyMateApp());
+  runApp(user());
 }
 
-class MyMateApp extends StatelessWidget {
+class user extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyMatePage(),
+      home: UserPage(),
     );
   }
 }
 
-class MyMatePage extends StatelessWidget {
+class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
-      body: Row(
+      body: Stack(
         children: [
           // Main Content Area
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header Section
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+          Row(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Profile Picture and User Info
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundColor: Color(0xFFE6E6E6),
-                            child: Icon(Icons.person, size: 40, color: Colors.white),
-                          ),
-                          SizedBox(width: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "User’s full Name",
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFF1C1C1C),
-                                ),
-                              ),
-                              Text(
-                                "User ID",
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                  color: Color(0xFF6F6F6F),
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  _buildTag("Boosted", Color(0xFF0703F1)),
-                                  SizedBox(width: 8),
-                                  _buildTag("Stranded", Color(0xFF2DBF57)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-
-                  // Divider
-                  Divider(color: Colors.grey),
-                  SizedBox(height: 20),
-                      // Action Buttons
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            child: Text('Send Message'),
-                          ),
-                          SizedBox(width: 10),
-                          _buildOutlinedButton("Suspend", 75),
-                          SizedBox(width: 10),
-                          _buildOutlinedButton("Delete", 47),
-                          SizedBox(width: 10),
-                          _buildOutlinedButton("Ban", 50),
-                        ],
-                      ),
+                      _buildHeaderSection(),
+                      SizedBox(height: 10),
+                      Divider(color: Colors.grey),
+                      SizedBox(height: 15),
+                      _buildTabsSection(),
+                      SizedBox(height: 15),
+                      Divider(color: Colors.grey),
+                      SizedBox(height: 15),
+                      _buildManageButtonsRow(),
+                      SizedBox(height: 15),
                     ],
                   ),
-                  SizedBox(height: 20),
-
-                  // Horizontal Wrap (Tabs)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(child: _buildTab("Connection (1234)")),
-                      SizedBox(width: 8),
-                      Expanded(child: _buildTab("Send interest (123)")),
-                      SizedBox(width: 8),
-                      Expanded(child: _buildTab("Receive interest (345)")),
-                      SizedBox(width: 8),
-                      Expanded(child: _buildTab("Block (12)")),
-                      SizedBox(width: 8),
-                      Expanded(child: _buildTab("Report (3)")),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-
-                  // Divider
-                  Divider(color: Colors.grey),
-                  SizedBox(height: 20),
-
-                  // Add and Manage buttons (Row horizontally)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ManageButton(label: 'Add to Category'),
-                      ManageButton(label: 'Offer Coupon'),
-                      ManageButton(label: 'Add Status'),
-                      ManageButton(label: 'Add Boosts'),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
+          _buildExitButton(),
+          _buildRankTypeButton(),
+          _buildRankNoButton(),
+          _buildSendMessageButton(),
+          _buildSearchBar(),
         ],
       ),
     );
   }
 
-  Widget _buildSidebarItem(String title, {IconData? icon}) {
-    return ListTile(
-      leading: icon != null ? Icon(icon, size: 20, color: Color(0xFFABABAB)) : null,
-      title: Text(
-        title,
-        style: TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 20,
-          fontWeight: FontWeight.w400,
-          color: Color(0xFFABABAB),
+  // Header Section
+  Widget _buildHeaderSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildProfilePicture(),
+            SizedBox(width: 20),
+            _buildUserInfo(),
+          ],
         ),
-      ),
+        _buildActionButtons(),
+      ],
     );
   }
 
-  Widget _buildSubSidebarItem(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 30.0),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-          color: Color(0xFFABABAB),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTag(String title, Color color) {
+  // Profile Picture
+  Widget _buildProfilePicture() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      width: 70,
+      height: 70,
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(5),
+        color: Color(0xFFE6E6E6),
+        shape: BoxShape.circle,
+        border: Border.all(color: Color(0xFF6F6F6F), width: 5),
+      ),
+      child: CircleAvatar(
+        radius: 35,
+        backgroundColor: Colors.white,
+        child: Icon(Icons.person, size: 35, color: Colors.grey),
+      ),
+    );
+  }
+
+  // User Info
+  Widget _buildUserInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "User’s full Name",
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 24,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF1C1C1C),
+          ),
+        ),
+        Text(
+          "User ID",
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+            height: 1.2,
+            color: Color(0xFF6F6F6F),
+          ),
+        ),
+        SizedBox(height: 20),
+        Divider(color: Colors.grey),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildTag("Boosted", Color(0xFF0703F1), Color(0xFFEFF1FA)),
+            SizedBox(width: 8),
+            _buildTag("Stranded", Color(0xFF34C759), Color(0xFFEFFAF2)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // Action Buttons
+  Widget _buildActionButtons() {
+    return Row(
+      children: [
+        _buildOutlinedButton("Suspend", 75),
+        SizedBox(width: 10),
+        _buildOutlinedButton("Delete", 47),
+        SizedBox(width: 10),
+        _buildOutlinedButton("Ban", 50),
+        SizedBox(width: 20),
+      ],
+    );
+  }
+
+  // Tabs Section
+ Widget _buildTabsSection() {
+  final tabs = [
+    "Connection (1234)",
+    "Send interest (123)",
+    "Receive interest (345)",
+    "Block (12)",
+    "Report (3)",
+  ];
+
+  // Widths for each tab to match the specified layout.
+  final tabWidths = [161.0, 165.0, 188.0, 95.0, 98.0];
+
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: List.generate(tabs.length, (index) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: Container(
+          width: tabWidths[index],
+          height: 28,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Color(0xFFE6E6E6)),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: Text(
+              tabs[index],
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFF6F6F6F),
+                height: 19 / 16, // Line height
+              ),
+            ),
+          ),
+        ),
+      );
+    }),
+  );
+}
+
+
+Widget _buildManageButtonsRow() {
+  final labels = ["Add to Category", "Offer Coupon", "Add Status", "Add Boosts"];
+  final buttonWidths = [166.0, 136.0, 121.0, 121.0]; // Corresponds to the specified widths
+
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: List.generate(labels.length, (index) {
+      return Padding(
+        padding: const EdgeInsets.only(right: 10), // Gap between buttons
+        child: ManageButton(
+          label: labels[index],
+          width: buttonWidths[index],
+        ),
+      );
+    }),
+  );
+}
+
+
+  // Tags
+  Widget _buildTag(String label, Color textColor, Color backgroundColor) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 12),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(26),
       ),
       child: Text(
-        title,
+        label,
         style: TextStyle(
           fontFamily: 'Inter',
-          fontSize: 14,
+          fontSize: 18,
           fontWeight: FontWeight.w400,
-          color: Colors.white,
+          height: 22 / 18,
+          color: textColor,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  // Buttons
+  Widget _buildOutlinedButton(String title, double width) {
+    return Container(
+      width: width,
+      height: 25,
+      child: OutlinedButton(
+        onPressed: () {},
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          side: BorderSide(color: Color(0xFFFF2626)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(color: Color(0xFFFF2626), fontSize: 12),
         ),
       ),
     );
   }
 
- Widget _buildOutlinedButton(String title, double width) {
-  return Container(
-    width: width, // Set the width dynamically
-    height: 25,   // Set the fixed height
-    child: OutlinedButton(
-      onPressed: () {},
-      style: OutlinedButton.styleFrom(
-        padding: EdgeInsets.zero, 
-        side: BorderSide(color: Color(0xFFFF2626)), // Red border color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5), // Border radius of 5px
-        ),
+  // Positioned Buttons/Elements
+  Widget _buildExitButton() {
+    return Positioned(
+      top: 190,
+      left: 1442,
+      child: _buildColoredButton("Exit", Color(0xFF6F6F6F)),
+    );
+  }
+
+  Widget _buildRankTypeButton() {
+    return Positioned(
+      top: 195,
+      left: 1143,
+      child: _buildRankButton("Rank Type (ABC)"),
+    );
+  }
+
+  Widget _buildRankNoButton() {
+    return Positioned(
+      top: 195,
+      left: 1290,
+      child: _buildRankButton("Rank No (123)"),
+    );
+  }
+
+  Widget _buildSendMessageButton() {
+  return Positioned(
+    top: 117,
+    left: 1150,
+    child: Container(
+      width: 157,
+      height: 35,
+      decoration: BoxDecoration(
+        color: Color(0xFF0703F1), // Background color
+        borderRadius: BorderRadius.circular(5), // Rounded corners
       ),
-      child: Text(
-        title,
-        style: TextStyle(color: Color(0xFFFF2626), fontSize: 12), // Red text
+      child: Center(
+        child: Text(
+          "Send Message", // Button text
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+            height: 22 / 18, // Line height
+            color: Color(0xFFF3F2F2), // Text color
+          ),
+        ),
       ),
     ),
   );
 }
 
-  Widget _buildTab(String title) {
+
+  Widget _buildSearchBar() {
+    return Positioned(
+      top: 120,
+      right: 20,
+      child: Container(
+        width: 165,
+        height: 30,
+        padding: EdgeInsets.symmetric(horizontal: 11),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Color(0xFFE6E6E6)),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.search, color: Color(0xFFD7D7D7), size: 20),
+            SizedBox(width: 15),
+            Expanded(
+              child: Text(
+                'Search',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFFD7D7D7),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper Buttons
+  Widget _buildColoredButton(String label, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+      width: 75,
+      height: 35,
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Color(0xFFE6E6E6)),
-        borderRadius: BorderRadius.circular(12),
+        color: color,
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Center(
         child: Text(
-          title,
+          label,
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFFF3F2F2),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRankButton(String label) {
+    return Container(
+      width: 141,
+      height: 28,
+      padding: EdgeInsets.symmetric(horizontal: 9),
+      decoration: BoxDecoration(
+        color: Color(0xFFF8F8F8),
+        border: Border.all(color: Color(0xFFE6E6E6)),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Center(
+        child: Text(
+          label,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 16,
@@ -240,25 +390,46 @@ class MyMatePage extends StatelessWidget {
   }
 }
 
+// Custom Manage Button Widget
 class ManageButton extends StatelessWidget {
   final String label;
+  final double width;
 
-  const ManageButton({required this.label});
+  const ManageButton({
+    required this.label,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      width: width,
+      height: 28, // Height is fixed as per the design
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFFD7D7D7)),
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(5), // Matches border-radius: 5px
+        border: Border.all(color: Color(0xFFD7D7D7)), // Border color: #D7D7D7
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: Color(0xFFD7D7D7),
-          fontSize: 16,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFFD7D7D7), // Matches text color: #D7D7D7
+              height: 19 / 16, // Line height ratio
+            ),
+          ),
+          SizedBox(width: 5), // Space before the chevron
+          Icon(
+            Icons.expand_more, // Placeholder for chevron-down
+            size: 12,
+            color: Color(0xFFD7D7D7), // Chevron color matches border
+          ),
+        ],
       ),
     );
   }
