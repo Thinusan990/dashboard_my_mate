@@ -21,40 +21,48 @@ class _userscreenstate extends State<userscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
-      body: Stack(
-        children: [
-          // Main Content Area
-          Row(
+      body: SafeArea(
+        child: Row(
+          children: [
+          // Sidebar
+          Expanded(
+          flex: 2, // Sidebar takes 2/10 of the width
+          child: SidebarLayout(),
+        ),
+        // Main Content Area
+        Expanded(
+          flex: 8, // Main content takes 8/10 of the width
+          child: Stack(
+              children: [
+          SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildHeaderSection(),
-                      SizedBox(height: 10),
-                      Divider(color: Colors.grey),
-                      SizedBox(height: 15),
-                      _buildTabsSection(),
-                      SizedBox(height: 15),
-                      Divider(color: Colors.grey),
-                      SizedBox(height: 15),
-                      _buildManageButtonsRow(),
-                      SizedBox(height: 15),
-                    ],
-                  ),
-                ),
-              ),
+              _buildHeaderSection(),
+              SizedBox(height: 10),
+              Divider(color: Colors.grey),
+              SizedBox(height: 15),
+              _buildTabsSection(),
+              SizedBox(height: 15),
+              Divider(color: Colors.grey),
+              SizedBox(height: 15),
+              _buildManageButtonsRow(),
+              SizedBox(height: 15),
             ],
           ),
-          _buildExitButton(),
-          _buildRankTypeButton(),
-          _buildRankNoButton(),
-          _buildSendMessageButton(),
-          _buildSearchBar(),
-        ],
+        ),
+        _buildExitButton(),
+        _buildRankTypeButton(),
+        _buildRankNoButton(),
+        _buildSendMessageButton(),
+        _buildSearchBar(),
+        ]
+    )
+        )
+          ],
       ),
+      )
     );
   }
 
