@@ -406,8 +406,8 @@ class ManageButton extends StatelessWidget {
       width: width,
       height: 28, // Height is fixed as per the design
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5), // Matches border-radius: 5px
-        border: Border.all(color: Color(0xFFD7D7D7)), // Border color: #D7D7D7
+        borderRadius: BorderRadius.circular(5), // border-radius
+        border: Border.all(color: Color(0xFFD7D7D7)), // Border color
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -419,7 +419,7 @@ class ManageButton extends StatelessWidget {
               fontFamily: 'Inter',
               fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: Color(0xFFD7D7D7), // Matches text color: #D7D7D7
+              color: Color(0xFFD7D7D7), // text color
               height: 19 / 16, // Line height ratio
             ),
           ),
