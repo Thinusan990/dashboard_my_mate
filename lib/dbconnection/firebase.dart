@@ -57,19 +57,33 @@ class FirebaseService {
   /// Fetch counts for active, inactive, subscribed, and unsubscribed users
   Future<Map<String, int>> fetchCounts() async {
     try {
-      QuerySnapshot snapshot = await _firestore.collection('clients').get();
+      // Fetch documents from the 'client' collection
+      QuerySnapshot snapshot = await _firestore.collection('client').get();
+
+      // Extract and process data from the documents
       final users = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
 
-      int activeCount = users.where((user) => user['Active'] == true).length;
-      int inactiveCount = users.where((user) => user['Active'] == false).length;
-      int subscribedCount = users
-          .where((user) =>
-      user['user type'] == 'premium' ||
-          user['user type'] == 'basic' ||
-          user['user type'] == 'standard')
-          .length;
-      int unsubscribedCount = users.length - subscribedCount;
+      // Count users based on their 'status' inside 'user_type'
+      int activeCount = users.where((user) {
+        final userType = user['user_type'] ?? {};  // Access 'user_type' map
+        return userType['status'] == 'Active';  // Check if 'status' is Active
+      }).length;
 
+      int inactiveCount = users.where((user) {
+        final userType = user['user_type'] ?? {};  // Access 'user_type' map
+        return userType['status'] == 'Inactive';  // Check if 'status' is Inactive
+      }).length;
+
+      // Count users based on 'user_type' for subscribed and unsubscribed
+      int subscribedCount = users.where((user) {
+        final userType = user['user_type'] ?? {};  // Access 'user_type' map
+        final type = userType['user_type'] ?? '';  // Get the specific user type ('Premium', etc.)
+        return type == 'Premium' || type == 'Basic' || type == 'Standard';  // Check if user is subscribed
+      }).length;
+
+      int unsubscribedCount = users.length - subscribedCount;  // The rest are unsubscribed
+
+      // Return the computed counts
       return {
         'active': activeCount,
         'inactive': inactiveCount,

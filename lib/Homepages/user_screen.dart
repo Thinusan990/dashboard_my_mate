@@ -10,60 +10,49 @@ class _userscreenstate extends State<userscreen> {
   TextEditingController searchController = TextEditingController();
   String searchQuery = '';
 
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF8F8F8),
-      body: SafeArea(
-        child: Row(
-          children: [
-          // Sidebar
-          Expanded(
-          flex: 2, // Sidebar takes 2/10 of the width
-          child: SidebarLayout(),
-        ),
-        // Main Content Area
-        Expanded(
-          flex: 8, // Main content takes 8/10 of the width
-          child: Stack(
-              children: [
-          SingleChildScrollView(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        backgroundColor: Color(0xFFF8F8F8),
+        body: SafeArea(
+          child: Row(
             children: [
-              _buildHeaderSection(),
-              SizedBox(height: 10),
-              Divider(color: Colors.grey),
-              SizedBox(height: 15),
-              _buildTabsSection(),
-              SizedBox(height: 15),
-              Divider(color: Colors.grey),
-              SizedBox(height: 15),
-              _buildManageButtonsRow(),
-              SizedBox(height: 15),
+              // Sidebar
+              Expanded(
+                flex: 2, // Sidebar takes 2/10 of the width
+                child: SidebarLayout(),
+              ),
+              // Main Content Area
+              Expanded(
+                  flex: 8, // Main content takes 8/10 of the width
+                  child: Stack(children: [
+                    SingleChildScrollView(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildHeaderSection(),
+                          SizedBox(height: 10),
+                          Divider(color: Colors.grey),
+                          SizedBox(height: 15),
+                          _buildTabsSection(),
+                          SizedBox(height: 15),
+                          Divider(color: Colors.grey),
+                          SizedBox(height: 15),
+                          _buildManageButtonsRow(),
+                          SizedBox(height: 15),
+                        ],
+                      ),
+                    ),
+                    _buildExitButton(),
+                    _buildRankTypeButton(),
+                    _buildRankNoButton(),
+                    _buildSendMessageButton(),
+                    _buildSearchBar(),
+                  ]))
             ],
           ),
-        ),
-        _buildExitButton(),
-        _buildRankTypeButton(),
-        _buildRankNoButton(),
-        _buildSendMessageButton(),
-        _buildSearchBar(),
-        ]
-    )
-        )
-          ],
-      ),
-      )
-    );
+        ));
   }
 
   // Header Section
@@ -200,10 +189,19 @@ class _userscreenstate extends State<userscreen> {
     );
   }
 
-
   Widget _buildManageButtonsRow() {
-    final labels = ["Add to Category", "Offer Coupon", "Add Status", "Add Boosts"];
-    final buttonWidths = [166.0, 136.0, 121.0, 121.0]; // Corresponds to the specified widths
+    final labels = [
+      "Add to Category",
+      "Offer Coupon",
+      "Add Status",
+      "Add Boosts"
+    ];
+    final buttonWidths = [
+      166.0,
+      136.0,
+      121.0,
+      121.0
+    ]; // Corresponds to the specified widths
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -218,7 +216,6 @@ class _userscreenstate extends State<userscreen> {
       }),
     );
   }
-
 
   // Tags
   Widget _buildTag(String label, Color textColor, Color backgroundColor) {
@@ -316,7 +313,6 @@ class _userscreenstate extends State<userscreen> {
       ),
     );
   }
-
 
   Widget _buildSearchBar() {
     return Positioned(
