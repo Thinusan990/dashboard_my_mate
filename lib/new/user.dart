@@ -1,57 +1,67 @@
+import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(user());
-}
-
-class user extends StatelessWidget {
+class userscreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: UserPage(),
-    );
-  }
+  _userscreenstate createState() => _userscreenstate();
 }
 
-class UserPage extends StatelessWidget {
+class _userscreenstate extends State<userscreen> {
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
+   bool isEditMode = false; // Flag to toggle edit mode
+  bool isManageButtonEnabled = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
-      body: Stack(
-        children: [
-          // Main Content Area
-          Row(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildHeaderSection(),
-                      SizedBox(height: 10),
-                      Divider(color: Colors.grey),
-                      SizedBox(height: 15),
-                      _buildTabsSection(),
-                      SizedBox(height: 15),
-                      Divider(color: Colors.grey),
-                      SizedBox(height: 15),
-                      _buildManageButtonsRow(),
-                      SizedBox(height: 15),
-                    ],
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Sidebar
+            Expanded(
+              flex: 2, // Sidebar takes 2/10 of the width
+              child: SidebarLayout(),
+            ),
+            // Main Content Area
+            Expanded(
+              flex: 8, // Main content takes 8/10 of the width
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildHeaderSection(),
+                        SizedBox(height: 3),
+                        Divider(color: Colors.grey,),
+                        SizedBox(height: 7),
+                        _buildBoostedStrandedTagsRow(),
+                        SizedBox(height: 7),
+                        Divider(color: Colors.grey),
+                        SizedBox(height: 5),
+                        _buildTabsSection(),
+                        SizedBox(height: 5),
+                        Divider(color: Colors.grey),
+                        SizedBox(height: 5),
+                        _buildManageButtonsRow(),
+                      ],
+                    ),
                   ),
-                ),
+                  _buildActionButtons(),
+                  _buildEditButton(),
+                  _buildRankTypeButton(),
+                  _buildRankNoButton(),
+                  _buildSendMessageButton(),
+                  _buildSearchBar(),
+                ],
               ),
-            ],
-          ),
-          _buildExitButton(),
-          _buildRankTypeButton(),
-          _buildRankNoButton(),
-          _buildSendMessageButton(),
-          _buildSearchBar(),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -66,11 +76,10 @@ class UserPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildProfilePicture(),
-            SizedBox(width: 20),
+            SizedBox(width: 10),
             _buildUserInfo(),
           ],
         ),
-        _buildActionButtons(),
       ],
     );
   }
@@ -86,7 +95,7 @@ class UserPage extends StatelessWidget {
         border: Border.all(color: Color(0xFF6F6F6F), width: 5),
       ),
       child: CircleAvatar(
-        radius: 35,
+        radius: 32,
         backgroundColor: Colors.white,
         child: Icon(Icons.person, size: 35, color: Colors.grey),
       ),
@@ -102,7 +111,7 @@ class UserPage extends StatelessWidget {
           "User’s full Name",
           style: TextStyle(
             fontFamily: 'Inter',
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.w500,
             color: Color(0xFF1C1C1C),
           ),
@@ -112,103 +121,113 @@ class UserPage extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Inter',
             fontWeight: FontWeight.w400,
-            fontSize: 16,
+            fontSize: 14,
             height: 1.2,
             color: Color(0xFF6F6F6F),
           ),
         ),
-        SizedBox(height: 20),
-        Divider(color: Colors.grey),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      ],
+   );
+  }
+
+  // Action Buttons with Positioning
+ Widget _buildActionButtons() {
+  return Stack(
+    children: [
+      // Top Action Buttons
+      Positioned(
+        top: 25, // Adjust the distance from the top as needed
+        right: 20, // You can adjust the horizontal alignment as well
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start, // Align to the left or center as needed
           children: [
-            _buildTag("Boosted", Color(0xFF0703F1), Color(0xFFEFF1FA)),
-            SizedBox(width: 8),
-            _buildTag("Stranded", Color(0xFF34C759), Color(0xFFEFFAF2)),
+            _buildOutlinedButton("Suspend", 75),
+            SizedBox(width: 10),
+            _buildOutlinedButton("Delete", 47),
+            SizedBox(width: 10),
+            _buildOutlinedButton("Ban", 50),
+            SizedBox(width: 20),
           ],
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+ }
 
-  // Action Buttons
-  Widget _buildActionButtons() {
-    return Row(
-      children: [
-        _buildOutlinedButton("Suspend", 75),
-        SizedBox(width: 10),
-        _buildOutlinedButton("Delete", 47),
-        SizedBox(width: 10),
-        _buildOutlinedButton("Ban", 50),
-        SizedBox(width: 20),
-      ],
-    );
-  }
 
   // Tabs Section
- Widget _buildTabsSection() {
-  final tabs = [
-    "Connection (1234)",
-    "Send interest (123)",
-    "Receive interest (345)",
-    "Block (12)",
-    "Report (3)",
-  ];
+  Widget _buildTabsSection() {
+    final tabs = [
+      "Connection (1234)",
+      "Send interest (123)",
+      "Receive interest (345)",
+      "Block (12)",
+      "Report (3)",
+    ];
 
-  // Widths for each tab to match the specified layout.
-  final tabWidths = [161.0, 165.0, 188.0, 95.0, 98.0];
+    // Widths for each tab to match the specified layout.
+    final tabWidths = [145.0, 155.0, 168.0, 85.0, 88.0];
 
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: List.generate(tabs.length, (index) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Container(
-          width: tabWidths[index],
-          height: 28,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Color(0xFFE6E6E6)),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Text(
-              tabs[index],
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFF6F6F6F),
-                height: 19 / 16, // Line height
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: List.generate(tabs.length, (index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Container(
+            width: tabWidths[index],
+            height: 28,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Color(0xFFE6E6E6)),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                tabs[index],
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF6F6F6F),
+                  height: 19 / 16, // Line height
+                ),
               ),
             ),
           ),
-        ),
-      );
-    }),
+        );
+      }),
+    );
+  }
+
+  Widget _buildBoostedStrandedTagsRow() {
+  return Wrap(
+    alignment: WrapAlignment.center, // Aligns content horizontally
+    spacing: 8, // Space between tags
+    children: [
+      _buildTag("Boosted", Color(0xFF0703F1), Color(0xFFEFF1FA)),
+      _buildTag("Stranded", Color(0xFF34C759), Color(0xFFEFFAF2)),
+    ],
   );
 }
 
+  Widget _buildManageButtonsRow() {
+    final labels = ["Add to Category", "Offer Coupon", "Add Status", "Add Boosts"];
+    final buttonWidths = [166.0, 136.0, 121.0, 121.0]; // Corresponds to the specified widths
 
-Widget _buildManageButtonsRow() {
-  final labels = ["Add to Category", "Offer Coupon", "Add Status", "Add Boosts"];
-  final buttonWidths = [166.0, 136.0, 121.0, 121.0]; // Corresponds to the specified widths
-
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: List.generate(labels.length, (index) {
-      return Padding(
-        padding: const EdgeInsets.only(right: 10), // Gap between buttons
-        child: ManageButton(
-          label: labels[index],
-          width: buttonWidths[index],
-        ),
-      );
-    }),
-  );
-}
-
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: List.generate(labels.length, (index) {
+        return Padding(
+          padding: const EdgeInsets.only(right: 10), // Gap between buttons
+          child: ManageButton(
+            label: labels[index],
+            width: buttonWidths[index],
+            isEnabled: isManageButtonEnabled, // Pass the enabled state
+          ),
+        );
+      }),
+    );
+  }
 
   // Tags
   Widget _buildTag(String label, Color textColor, Color backgroundColor) {
@@ -222,7 +241,7 @@ Widget _buildManageButtonsRow() {
         label,
         style: TextStyle(
           fontFamily: 'Inter',
-          fontSize: 18,
+          fontSize: 14,
           fontWeight: FontWeight.w400,
           height: 22 / 18,
           color: textColor,
@@ -236,7 +255,7 @@ Widget _buildManageButtonsRow() {
   Widget _buildOutlinedButton(String title, double width) {
     return Container(
       width: width,
-      height: 25,
+      height: 20,
       child: OutlinedButton(
         onPressed: () {},
         style: OutlinedButton.styleFrom(
@@ -255,92 +274,128 @@ Widget _buildManageButtonsRow() {
   }
 
   // Positioned Buttons/Elements
-  Widget _buildExitButton() {
+
+ Widget _buildEditButton() {
     return Positioned(
-      top: 190,
-      left: 1442,
-      child: _buildColoredButton("Exit", Color(0xFF6F6F6F)),
+      top: 142,
+      right: 20,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            isEditMode = !isEditMode; // Toggle edit mode
+            isManageButtonEnabled = !isManageButtonEnabled; // Enable or disable manage buttons
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(isEditMode ? "Edit Mode Activated" : "View Mode")),
+          );
+        },
+        child: _buildColoredButton(isEditMode ? "Save" : "Edit", Color(0xFF6F6F6F)),
+      ),
     );
   }
 
+
+
   Widget _buildRankTypeButton() {
     return Positioned(
-      top: 195,
-      left: 1143,
+      top: 145,
+      right: 110,
       child: _buildRankButton("Rank Type (ABC)"),
     );
   }
 
   Widget _buildRankNoButton() {
     return Positioned(
-      top: 195,
-      left: 1290,
+      top: 145,
+      right: 245,
       child: _buildRankButton("Rank No (123)"),
     );
   }
 
   Widget _buildSendMessageButton() {
   return Positioned(
-    top: 117,
-    left: 1150,
-    child: Container(
-      width: 157,
-      height: 35,
-      decoration: BoxDecoration(
-        color: Color(0xFF0703F1), // Background color
-        borderRadius: BorderRadius.circular(5), // Rounded corners
-      ),
-      child: Center(
-        child: Text(
-          "Send Message", // Button text
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-            height: 22 / 18, // Line height
-            color: Color(0xFFF3F2F2), // Text color
+    top: 90,
+    right: 200,
+    child: GestureDetector(
+      onTap: () {
+        // Show a SnackBar as a placeholder action for sending a message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Message Sent")),
+        );
+      },
+      child: Container(
+        width: 120,
+        height: 30,
+        decoration: BoxDecoration(
+          color: Color(0xFF0703F1), // Background color
+          borderRadius: BorderRadius.circular(12), // Rounded corners
+        ),
+        child: Center(
+          child: Text(
+            "Send Message", // Button text
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              height: 22 / 18, // Line height
+              color: Color(0xFFF3F2F2), // Text color
+            ),
           ),
         ),
       ),
     ),
   );
-}
+ }
 
 
   Widget _buildSearchBar() {
-    return Positioned(
-      top: 120,
-      right: 20,
-      child: Container(
-        width: 165,
-        height: 30,
-        padding: EdgeInsets.symmetric(horizontal: 11),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Color(0xFFE6E6E6)),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.search, color: Color(0xFFD7D7D7), size: 20),
-            SizedBox(width: 15),
-            Expanded(
-              child: Text(
-                'Search',
-                style: TextStyle(
+  return Positioned(
+    top: 84,
+    right: 20,
+    child: Container(
+      width: 160,
+      height: 42.5,
+      padding: EdgeInsets.symmetric(horizontal: 11),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Color(0xFFE6E6E6)),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.search, color: Color(0xFFD7D7D7), size: 20),
+          SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              controller: searchController, // The controller to manage the text input
+              decoration: InputDecoration(
+                hintText: 'Search', // Placeholder text
+                border: InputBorder.none, // Removes the border around the text field
+                hintStyle: TextStyle(
                   fontFamily: 'Inter',
-                  fontSize: 16,
+                  fontSize: 12,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFFD7D7D7),
                 ),
               ),
+              onSubmitted: (query) {
+                setState(() {
+                  searchQuery = query; // Store the search query
+                });
+                // You can perform the search or filtering here
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Searching for: $searchQuery")),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
+    ),
+  );
   }
+}
 
   // Helper Buttons
   Widget _buildColoredButton(String label, Color color) {
@@ -356,7 +411,7 @@ Widget _buildManageButtonsRow() {
           label,
           style: TextStyle(
             fontFamily: 'Inter',
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.w600,
             color: Color(0xFFF3F2F2),
           ),
@@ -367,7 +422,7 @@ Widget _buildManageButtonsRow() {
 
   Widget _buildRankButton(String label) {
     return Container(
-      width: 141,
+      width: 120,
       height: 28,
       padding: EdgeInsets.symmetric(horizontal: 9),
       decoration: BoxDecoration(
@@ -380,7 +435,7 @@ Widget _buildManageButtonsRow() {
           label,
           style: TextStyle(
             fontFamily: 'Inter',
-            fontSize: 16,
+            fontSize: 12,
             fontWeight: FontWeight.w400,
             color: Color(0xFF6F6F6F),
           ),
@@ -388,16 +443,18 @@ Widget _buildManageButtonsRow() {
       ),
     );
   }
-}
+
 
 // Custom Manage Button Widget
 class ManageButton extends StatelessWidget {
   final String label;
   final double width;
+  final bool isEnabled; // Add this parameter
 
   const ManageButton({
     required this.label,
     required this.width,
+    required this.isEnabled, // Add this parameter
   });
 
   @override
@@ -407,7 +464,9 @@ class ManageButton extends StatelessWidget {
       height: 28, // Height is fixed as per the design
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5), // border-radius
-        border: Border.all(color: Color(0xFFD7D7D7)), // Border color
+        border: Border.all(
+          color: isEnabled ? Color(0xFFD7D7D7) : Color(0xFFB0B0B0), // Lighter color when disabled
+        ), // Border color
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -417,9 +476,9 @@ class ManageButton extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Inter',
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w400,
-              color: Color(0xFFD7D7D7), // text color
+              color: isEnabled ? Color(0xFFD7D7D7) : Color(0xFFB0B0B0), // Lighter text when disabled
               height: 19 / 16, // Line height ratio
             ),
           ),
@@ -427,7 +486,7 @@ class ManageButton extends StatelessWidget {
           Icon(
             Icons.expand_more, // Placeholder for chevron-down
             size: 12,
-            color: Color(0xFFD7D7D7), // Chevron color matches border
+            color: isEnabled ? Color(0xFFD7D7D7) : Color(0xFFB0B0B0), // Lighter chevron when disabled
           ),
         ],
       ),
