@@ -6,15 +6,17 @@ class FirebaseService {
   /// Fetch all users from the `clients` collection
   Future<List<Map<String, dynamic>>> fetchUsers() async {
     try {
-      QuerySnapshot snapshot = await _firestore.collection('clients').get();
+      QuerySnapshot snapshot = await _firestore.collection('client').get();
       return snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
+        final personalDetails = data['personalDetails'] ?? {};
+
         return {
           'id': doc.id,
-          'full_name': data['full_name'] ?? 'N/A',
-          'user_type': data['user type'] ?? 'N/A',
-          'rank_no': data['Rank no']?.toString() ?? 'N/A',
-          'rank_type': data['Rank type'] ?? 'N/A',
+          'full_name': personalDetails['full_name'] ?? 'N/A',
+          'user_type': personalDetails['user_type'] ?? 'N/A',
+          'rank_no': personalDetails['rank_no']?.toString() ?? 'N/A',
+          'rank_type': personalDetails['rank_type'] ?? 'N/A',
           'active': data['Active'] ?? false,
 
         };
@@ -83,7 +85,7 @@ class FirebaseService {
 
 Future<Map<String, dynamic>> fetchUserById(String userId) async {
   try {
-    DocumentSnapshot doc = await _firestore.collection('clients').doc(userId).get();
+    DocumentSnapshot doc = await _firestore.collection('client').doc(userId).get();
     if (doc.exists) {
       final data = doc.data() as Map<String, dynamic>;
       return {
@@ -100,6 +102,12 @@ Future<Map<String, dynamic>> fetchUserById(String userId) async {
         'mothers_name': data['mothers_name'] ?? 'N/A',
         'contact': data['contact'] ?? 'N/A',
         'no_of_siblings': data['no_of_siblings'] ?? 0,
+        'hobbies' : data['hobbies'] ?? 'N/A',
+        'Favorites' : data['favorites'] ?? 'N/A',
+        'Alcohol' : data['alcohol'] ?? 'N/A',
+        'sports' : data['sports'] ?? 'N/A',
+        'cooking' :data['cooking'] ?? 'N/A',
+        'Bio' : data['bio'] ?? 'N/A'
       };
     } else {
       return {};
