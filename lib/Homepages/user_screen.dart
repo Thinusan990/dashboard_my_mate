@@ -162,23 +162,35 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Widget _buildManageButton(String label, double width) {
-    return Container(
-      width: width,
-      height: 28,
-      decoration: BoxDecoration(
-        border: Border.all(color: isManageButtonEnabled ? Color(0xFFD7D7D7) : Color(0xFFB0B0B0)),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(label, style: _textStyle(14, FontWeight.w400, isManageButtonEnabled ? Color(0xFFD7D7D7) : Color(0xFFB0B0B0))),
-          SizedBox(width: 5),
-          Icon(Icons.expand_more, size: 12, color: isManageButtonEnabled ? Color(0xFFD7D7D7) : Color(0xFFB0B0B0)),
-        ],
-      ),
-    );
-  }
+  return Container(
+    width: width,
+    height: 28,
+    decoration: BoxDecoration(
+      border: Border.all(color: isManageButtonEnabled ? Color(0xFF6F6F6F) : Color(0xFFB0B0B0)),
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          label,
+          style: _textStyle(
+            14, 
+            FontWeight.w400, 
+            isManageButtonEnabled ? Color(0xFF6F6F6F) : Color(0xFFB0B0B0),
+          ),
+        ),
+        SizedBox(width: 5),
+        Icon(
+          Icons.expand_more, 
+          size: 12, 
+          color: isManageButtonEnabled ? Color(0xFF6F6F6F) : Color(0xFFB0B0B0),
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildSearchBar() {
     return Positioned(
