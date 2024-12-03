@@ -30,7 +30,7 @@ class FirebaseService {
   /// Add a new user to the `clients` collection
   Future<void> addUser(Map<String, dynamic> userData) async {
     try {
-      await _firestore.collection('clients').add(userData);
+      await _firestore.collection('client').add(userData);
     } catch (e) {
       print('Error adding user: $e');
     }
@@ -48,7 +48,7 @@ class FirebaseService {
   /// Delete a user by ID
   Future<void> deleteUser(String userId) async {
     try {
-      await _firestore.collection('clients').doc(userId).delete();
+      await _firestore.collection('client').doc(userId).delete();
     } catch (e) {
       print('Error deleting user: $e');
     }
