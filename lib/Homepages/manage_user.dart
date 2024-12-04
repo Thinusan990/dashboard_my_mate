@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dashboard_my_mate/users_details/about_me.dart';
+import 'package:dashboard_my_mate/users_details/more_about_me.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:dashboard_my_mate/widgets/subscriberschart.dart';
+import 'package:dashboard_my_mate/widgets/usertype_graph.dart';
 import 'package:flutter/material.dart';
 
 import '../dbconnection/firebase.dart';
-import '../widgets/user_details.dart';
 
 class ManageUsers extends StatefulWidget {
   @override
@@ -22,10 +24,6 @@ class _ManageUsersState extends State<ManageUsers> {
   final FirebaseService _firebaseService = FirebaseService();
 
 
-  List<Map<String, dynamic>> allUsers = [];
-  List<Map<String, dynamic>> displayedUsers = [];
-  int rowsPerPage = 5; // Number of rows per page
-  int currentPage = 0; // The current page index
 
   @override
   void initState() {
@@ -57,7 +55,7 @@ class _ManageUsersState extends State<ManageUsers> {
     try {
       final counts = await _firebaseService.fetchCounts();
       setState(() {
-        activeCount = counts['active'] ?? 0;
+        activeCount = counts['Active'] ?? 0;
         inactiveCount = counts['inactive'] ?? 0;
         subscribedCount = counts['subscribed'] ?? 0;
         unsubscribedCount = counts['unsubscribed'] ?? 0;
@@ -82,7 +80,11 @@ class _ManageUsersState extends State<ManageUsers> {
           'user_type': data['user type'] ?? 'N/A',
           'rank_no': data['Rank no']?.toString() ?? 'N/A',
           'rank_type': data['Rank type'] ?? 'N/A',
+<<<<<<< HEAD
           'active': usertype['status'] ?? false,
+=======
+          'active': data['status'] ?? false,
+>>>>>>> 552f6141f56836b3c1e285457b040047181fc901
         };
       }).toList();
     } catch (e) {
@@ -92,27 +94,10 @@ class _ManageUsersState extends State<ManageUsers> {
     }
   }
 
-  void _updateDisplayedUsers(){
-    int startIndex = currentPage * rowsPerPage;
-    int endIndex = startIndex + rowsPerPage;
-
-    setState(() {
-      displayedUsers = allUsers.sublist(startIndex,
-      endIndex > allUsers.length ? allUsers.length : endIndex,
-      );
-    });
-  }
-
-  void _changepage(int pageIndex) {
-    setState(() {
-      currentPage = pageIndex;
-      _updateDisplayedUsers();
-    });
-  }
 
 
-  Color _getStatusColor(String userType) {
-    switch (userType.toLowerCase()) {
+  Color _getStatusColor(String user_type) {
+    switch (user_type.toLowerCase()) {
       case 'premium':
         return Colors.red;
       case 'basic':
@@ -126,7 +111,6 @@ class _ManageUsersState extends State<ManageUsers> {
 
   @override
   Widget build(BuildContext context) {
-    int totalPages = (allUsers.length / rowsPerPage).ceil();
 
     return Scaffold(
       body: SafeArea(
@@ -347,7 +331,7 @@ class _ManageUsersState extends State<ManageUsers> {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
-                                                        builder: (context) => UserdetailsWidget(userId: user['id'] as String),
+                                                        builder: (context) => moreaboutmeWidget(userId: user['id'] as String),
                                                       ),
                                                     );
                                                   },
@@ -386,7 +370,7 @@ class _ManageUsersState extends State<ManageUsers> {
 
 
 
-                                  );
+                                    );
 
                                   }
                                 },

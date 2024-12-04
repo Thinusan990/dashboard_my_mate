@@ -4,7 +4,7 @@ import 'package:dashboard_my_mate/firebase_options.dart';
 import 'package:dashboard_my_mate/widgets/multiplepichart.dart';
 import 'package:dashboard_my_mate/widgets/package_boost.dart';
 import 'package:dashboard_my_mate/widgets/subscriberschart.dart';
-import 'package:dashboard_my_mate/widgets/user_details.dart';
+import 'package:dashboard_my_mate/users_details/about_me.dart';
 import 'package:dashboard_my_mate/widgets/userstatics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
+<<<<<<< HEAD
       home: NavamsaChartDesign(),
+=======
+      home:  ManageUsers(),
+>>>>>>> 552f6141f56836b3c1e285457b040047181fc901
     );
   }
 }
