@@ -69,21 +69,26 @@ class _ManageUsersState extends State<ManageUsers> {
 
   Future<List<Map<String, dynamic>>> _fetchUsers() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('clients').get();
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('client').get();
       return snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
+        final personalDetails = data['personalDetails'] ?? {};
+        final usertype = data['user_type'] ?? {};
+
+
         return {
           'id': doc.id,
-          'full_name': data['full_name'] ?? 'N/A',
+          'full_name': personalDetails['full_name'] ?? 'N/A',
           'user_type': data['user type'] ?? 'N/A',
           'rank_no': data['Rank no']?.toString() ?? 'N/A',
           'rank_type': data['Rank type'] ?? 'N/A',
-          'active': data['Active'] ?? false,
+          'active': usertype['status'] ?? false,
         };
       }).toList();
     } catch (e) {
       print('Error fetching users: $e');
       return [];
+
     }
   }
 

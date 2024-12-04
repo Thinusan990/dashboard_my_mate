@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'Homepages/manage_user.dart';
 import 'Homepages/user_screen.dart';
 import 'widgets/api_users.dart';
+import 'chart/navamsa_chart.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  userscreen(),
+      home: NavamsaChartDesign(),
     );
   }
 }
