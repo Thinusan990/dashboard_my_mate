@@ -64,8 +64,8 @@ class _moreaboutmeWidget extends State<moreaboutmeWidget> {
                             userData['alcohol'] ?? 'N/A'),
                         _buildRow('sports', userData['sports'] ?? 'N/A'),
                         _buildRow('cooking', userData['cooking'] ?? 'N/A'),
-                        _buildRow('Bio', userData['bio'], isBio: true),
-                        _buildPhotoSection('photo', userData['photo'] ?? 'N/A'),
+                        _buildRow('Bio', userData['Bio'], isBio: true),
+                        _buildPhotoSection('photo', userData['images'] ?? 'N/A'),
 
                       ],
                     ),
@@ -111,7 +111,8 @@ class _moreaboutmeWidget extends State<moreaboutmeWidget> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: isBio ? Axis.vertical : Axis.horizontal,
+
               child: Text(
                 value != null ? value.toString() : 'N/A',
                 style: const TextStyle(
@@ -130,6 +131,8 @@ class _moreaboutmeWidget extends State<moreaboutmeWidget> {
   }
 }
 Widget _buildPhotoSection(String title, dynamic photoData) {
+  List<dynamic> photos = (photoData is List) ? photoData : [];
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -145,24 +148,43 @@ Widget _buildPhotoSection(String title, dynamic photoData) {
       ),
       const SizedBox(height: 8),
       Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: List.generate(
           3,
-              (index) => Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Color(0xFFE6E6E6)),
-            ),
-            child: photoData != null
-                ? Image.network(
-              photoData,
-              fit: BoxFit.cover,
-            )
-                : Icon(Icons.image, color: Colors.grey[600]),
-          ),
+              (index) {
+            if (index < photos.length) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Color(0xFFE6E6E6)),
+                  ),
+                  child: Image.network(
+                    photos[index],
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Icon(Icons.broken_image, color: Colors.grey[600]),
+                  ),
+                ),
+              );
+            } else {
+              return Container(
+                width: 100,
+                height: 100,
+                margin: const EdgeInsets.only(right: 8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Color(0xFFE6E6E6)),
+                ),
+                child: Icon(Icons.image, color: Colors.grey[600]),
+              );
+            }
+          },
         ),
       ),
     ],

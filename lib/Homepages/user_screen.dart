@@ -31,18 +31,20 @@ class _UserScreenState extends State<UserScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildHeaderSection(),
-                        SizedBox(height: 3),
+                        SizedBox(height: 1),
                         Divider(color: Colors.grey),
-                        SizedBox(height: 7),
+                        SizedBox(height: 1),
                         _buildTagsRow(),
-                        SizedBox(height: 7),
+                        SizedBox(height: 2),
                         Divider(color: Colors.grey),
-                        SizedBox(height: 5),
+                        SizedBox(height: 2),
                         _buildTabsSection(),
-                        SizedBox(height: 5),
+                        SizedBox(height: 1),
                         Divider(color: Colors.grey),
-                        SizedBox(height: 5),
+                        SizedBox(height: 2),
                         _buildManageButtonsRow(),
+                        SizedBox(height: 10), // Add some space
+                        _buildThreeContainers(), // New containers added here
                       ],
                     ),
                   ),
@@ -96,8 +98,9 @@ class _UserScreenState extends State<UserScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("User’s full Name", style: _textStyle(20, FontWeight.w500)),
-        Text("User ID", style: _textStyle(14, FontWeight.w400, Color(0xFF6F6F6F))),
+        Text("User’s full Name", style: _textStyle(18, FontWeight.w500)),
+        Text("User ID",
+            style: _textStyle(14, FontWeight.w400, Color(0xFF6F6F6F))),
       ],
     );
   }
@@ -115,7 +118,8 @@ class _UserScreenState extends State<UserScreen> {
   Widget _buildTag(String label, Color textColor, Color bgColor) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 1, horizontal: 12),
-      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(26)),
+      decoration: BoxDecoration(
+          color: bgColor, borderRadius: BorderRadius.circular(26)),
       child: Text(label, style: _textStyle(14, FontWeight.w400, textColor)),
     );
   }
@@ -141,14 +145,20 @@ class _UserScreenState extends State<UserScreen> {
             border: Border.all(color: Color(0xFFE6E6E6)),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Center(child: Text(tabs[index], style: _textStyle(14, FontWeight.w400))),
+          child: Center(
+              child: Text(tabs[index], style: _textStyle(14, FontWeight.w400))),
         );
       }),
     );
   }
 
   Widget _buildManageButtonsRow() {
-    final labels = ["Add to Category", "Offer Coupon", "Add Status", "Add Boosts"];
+    final labels = [
+      "Add to Category",
+      "Offer Coupon",
+      "Add Status",
+      "Add Boosts"
+    ];
     final buttonWidths = [166.0, 136.0, 121.0, 121.0];
 
     return Row(
@@ -164,9 +174,11 @@ class _UserScreenState extends State<UserScreen> {
   Widget _buildManageButton(String label, double width) {
     return Container(
       width: width,
-      height: 28,
+      height: 22,
       decoration: BoxDecoration(
-        border: Border.all(color: isManageButtonEnabled ? Color(0xFF6F6F6F) : Color(0xFFB0B0B0)),
+        border: Border.all(
+            color:
+            isManageButtonEnabled ? Color(0xFF6F6F6F) : Color(0xFFB0B0B0)),
         borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
@@ -184,9 +196,34 @@ class _UserScreenState extends State<UserScreen> {
           Icon(
             Icons.expand_more,
             size: 12,
-            color: isManageButtonEnabled ? Color(0xFF6F6F6F) : Color(0xFFB0B0B0),
+            color:
+            isManageButtonEnabled ? Color(0xFF6F6F6F) : Color(0xFFB0B0B0),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildThreeContainers() {
+    return Row(
+      children: [
+        _buildContainer(),
+        _buildContainer(),
+        _buildContainer(),
+      ],
+    );
+  }
+
+  Widget _buildContainer() {
+    return Expanded(
+      child: Container(
+        height: 750,
+        margin: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
     );
   }
@@ -194,11 +231,11 @@ class _UserScreenState extends State<UserScreen> {
 
   Widget _buildSearchBar() {
     return Positioned(
-      top: 84,
+      top: 82,
       right: 20,
       child: Container(
         width: 160,
-        height: 42.5,
+        height: 35,
         padding: EdgeInsets.symmetric(horizontal: 11),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -219,7 +256,8 @@ class _UserScreenState extends State<UserScreen> {
                 ),
                 onSubmitted: (query) {
                   setState(() => searchQuery = query);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Searching for: $query")));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Searching for: $query")));
                 },
               ),
             ),
@@ -231,7 +269,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Widget _buildEditButton() {
     return Positioned(
-      top: 142,
+      top: 130,
       right: 20,
       child: GestureDetector(
         onTap: () {
@@ -239,16 +277,18 @@ class _UserScreenState extends State<UserScreen> {
             isEditMode = !isEditMode;
             isManageButtonEnabled = !isManageButtonEnabled;
           });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(isEditMode ? "Edit Mode Activated" : "View Mode")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(isEditMode ? "Edit Mode Activated" : "View Mode")));
         },
-        child: _buildColoredButton(isEditMode ? "Save" : "Edit", Color(0xFF6F6F6F)),
+        child: _buildColoredButton(
+            isEditMode ? "Save" : "Edit", Color(0xFF6F6F6F)),
       ),
     );
   }
 
   Widget _buildRankButtons() {
     return Positioned(
-      top: 145,
+      top: 130,
       right: 150,
       child: Row(
         children: [
@@ -275,11 +315,12 @@ class _UserScreenState extends State<UserScreen> {
 
   Widget _buildSendMessageButton() {
     return Positioned(
-      top: 90,
+      top: 85,
       right: 190,
       child: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Sending message...")));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Sending message...")));
         },
         child: _buildColoredButton("Send Message", Color(0xFF0703F1)),
       ),
@@ -292,13 +333,14 @@ class _UserScreenState extends State<UserScreen> {
 
     return Positioned(
       top: 40,
-      right:20,
+      right: 20,
       child: Row(
         children: List.generate(buttonLabels.length, (index) {
           return Padding(
             child: OutlinedButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Performing ${buttonLabels[index]}")));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Performing ${buttonLabels[index]}")));
               },
               style: OutlinedButton.styleFrom(
                 padding: EdgeInsets.zero,
@@ -308,7 +350,7 @@ class _UserScreenState extends State<UserScreen> {
                 ),
               ),
               child: Text(
-                buttonLabels[index], // Using the label from the original button
+                buttonLabels[index],
                 style: TextStyle(
                   color: Color(0xFFFF2626), // Text color matching border
                   fontSize: 12, // Font size
@@ -316,7 +358,6 @@ class _UserScreenState extends State<UserScreen> {
               ),
             ),
             padding: EdgeInsets.only(right: 10),
-
           );
         }),
       ),
@@ -331,11 +372,14 @@ class _UserScreenState extends State<UserScreen> {
         color: color,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Center(child: Text(label, style: _textStyle(14, FontWeight.w600, Color(0xFFF3F2F2)))),
+      child: Center(
+          child: Text(label,
+              style: _textStyle(14, FontWeight.w600, Color(0xFFF3F2F2)))),
     );
   }
 
   TextStyle _textStyle(double size, FontWeight weight, [Color? color]) {
-    return TextStyle(fontSize: size, fontWeight: weight, color: color ?? Colors.black);
+    return TextStyle(
+        fontSize: size, fontWeight: weight, color: color ?? Colors.black);
   }
 }
