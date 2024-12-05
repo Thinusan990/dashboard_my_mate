@@ -21,23 +21,6 @@ class CombinedChart extends StatelessWidget {
             RasiChart(), // The second chart
             SizedBox(height: 20), // Space below the charts
             // Place and Time of Birth information
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Place of Birth   : Jaffna, Sri Lanka",
-                    style: MyMateThemes.textStyleSmallWhite,
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "Time of Birth    : 11 : 45 PM",
-                    style: MyMateThemes.textStyleSmallWhite,
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -104,24 +87,42 @@ Widget chartWidget(String chartTitle) {
                 SizedBox(height: 8),
                 // Placeholder for the circular graphic
                 Container(
-                  height: 40,
-                  width: 40,
-                  decoration: MyMateThemes.circularDecoration,
-                  child: Center(
-                    child: Text(
-                      'Icon', // Replace with actual graphic
-                      style: MyMateThemes.textStyleBoldBlack,
-                    ),
+                  height:40, // Height based on your image size
+                  width: 40, // Width based on your image size
+                  child: Stack(
+                    children: [
+                     // First image (img1)
+                      Positioned(
+                        child: Image.asset('images/img2.png',  // Use the relative path as per your assets folder
+                          height: 40,       // Match image height
+                          width: 40,           // Match image width
+                          fit: BoxFit.cover,   // Adjust as needed to fit the container
+                        ),
+                      ),
+                      // Second image (img2)
+                      Positioned(
+                        left: 15,  // Adjust as per your requirement
+                        top: 15,   // Adjust as per your requirement
+                        child: Image.asset('images/img1.png',  // Use the relative path as per your assets folder
+                          height: 10,       // Match image height
+                          width: 10,           // Match image width
+                          fit: BoxFit.cover,   // Adjust as needed to fit the container
+                        ),
+                      ),
+                   ],
                   ),
                 ),
                 SizedBox(height: 8),
-                Text(
-                  'Hastam',
-                  style: MyMateThemes.textStyleBoldWhite,
-                ),
-                Text(
-                  'Virgo (கன்னி)',
-                  style: MyMateThemes.textStyleSmallWhite,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Hastam',
+                    style: MyMateThemes.textStyleBoldWhite,
+                    ),
+                    Text('Virgo (கன்னி)',
+                    style: MyMateThemes.textStyleSmallWhite,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -134,50 +135,73 @@ Widget chartWidget(String chartTitle) {
 
 Widget individualBox(String number) {
   return Container(
-    height: 52, // Matches the height in CSS
-    width: 52, // Matches the width in CSS
+    height: 52,
+    width: 52,
     decoration: MyMateThemes.boxDecoration,
     child: Stack(
       children: [
-        // Number "01"
+        // Number part
         Positioned(
-          top: 1, // Matches top: 1px
-          right: 2, // Aligns with CSS's `text-align: right`
-          child: Text(
-            number,
-            style: MyMateThemes.textStyleExtraSmallWhite.copyWith(
-              fontSize: 6, // Matches font-size: 6px
-              height: 7 / 6, // Matches line-height to font-size ratio
-              fontWeight: FontWeight.w600, // Matches font-weight: 600
-            ),
-          ),
+          top: 1,
+          right: 2,
+          child: numberWidget(number),
         ),
-        // English Text "Ma"
-        if (["01", "03", "06", "10", "12"].contains(number)) ...[
+        // Text part
+        if (["01", "03", "06", "10", "12"].contains(number))
           Positioned(
-            left: 2, // Matches left: 2px
-            bottom: 3, // Adjusted to match `top: 37px`
-            child: Text(
-              "Ma",
-              style: MyMateThemes.textStyleSmallWhite.copyWith(
-                fontSize: 12, // Matches font-size: 12px
-                height: 14 / 12, // Matches line-height: 14px
+            left: 2,
+            bottom: 3,
+            child: rowTextWidget("Ma", "செவ்"),
+          ),
+        // Special case for the 8th box with 3 rows of "Ma செவ்"
+        if (number == "08")
+          Positioned(
+            top: 10,
+            left: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                3,
+                (index) => rowTextWidget("Ma", "செவ்"),
               ),
             ),
           ),
-          Positioned(
-            left: 20, // Matches left: 20px
-            bottom: 3, // Adjusted to match `top: 44px`
-            child: Text(
-              "செவ்",
-              style: MyMateThemes.textStyleExtraSmallWhite.copyWith(
-                fontSize: 4, // Matches font-size: 4px
-                height: 5 / 4, // Matches line-height to font-size ratio
-              ),
-            ),
-          ),
-        ],
       ],
     ),
+  );
+}
+
+// Helper widget for the number
+Widget numberWidget(String number) {
+  return Text(
+    number,
+    style: MyMateThemes.textStyleExtraSmallWhite.copyWith(
+      fontSize: 6,
+      height: 7 / 6,
+      fontWeight: FontWeight.w600,
+    ),
+  );
+}
+
+// Helper widget for the row of "Ma செவ்"
+Widget rowTextWidget(String englishText, String tamilText) {
+  return Row(
+    children: [
+      Text(
+        englishText,
+        style: MyMateThemes.textStyleSmallWhite.copyWith(
+          fontSize: 12,
+          height: 14 / 12,
+        ),
+      ),
+      SizedBox(width: 3), // Space between "Ma" and "செவ்"
+      Text(
+        tamilText,
+        style: MyMateThemes.textStyleExtraSmallWhite.copyWith(
+          fontSize: 4,
+          height: 5 / 4,
+        ),
+      ),
+    ],
   );
 }
