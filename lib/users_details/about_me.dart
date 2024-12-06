@@ -60,8 +60,7 @@ class _aboutmeWidgetState extends State<aboutmeWidget> {
                                 : 'N/A'),
                         _buildRow('Date of Birth',
                             userData['date_of_birth'] ?? 'N/A'),
-                        _buildRow(
-                            'Occupation', userData['occupation'] ?? 'N/A'),
+                        _buildRow('Occupation', userData['occupation'] ?? 'N/A'),
                         _buildRow('Address', userData['address'] ?? 'N/A'),
                         _buildRow('Education', userData['education'] ?? 'N/A'),
                         _buildRow('Height', userData['height'] ?? 'N/A'),

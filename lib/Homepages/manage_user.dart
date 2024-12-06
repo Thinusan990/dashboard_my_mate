@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dashboard_my_mate/Homepages/user_screen.dart';
 import 'package:dashboard_my_mate/users_details/about_me.dart';
 import 'package:dashboard_my_mate/users_details/more_about_me.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
@@ -327,7 +328,7 @@ class _ManageUsersState extends State<ManageUsers> {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
-                                                        builder: (context) => moreaboutmeWidget(userId: user['id'] as String),
+                                                        builder: (context) => UserScreen(userId: user['id'] as String),
                                                       ),
                                                     );
                                                   },

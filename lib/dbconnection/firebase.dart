@@ -37,7 +37,8 @@ class FirebaseService {
   }
 
   /// Update a user's data by ID
-  Future<void> updateUser(String userId, Map<String, dynamic> updatedData) async {
+  Future<void> updateUser(
+      String userId, Map<String, dynamic> updatedData) async {
     try {
       await _firestore.collection('clients').doc(userId).update(updatedData);
     } catch (e) {
@@ -61,7 +62,9 @@ class FirebaseService {
       QuerySnapshot snapshot = await _firestore.collection('client').get();
 
       // Extract and process data from the documents
-      final users = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      final users = snapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
       int activeCount = 0;
       int inactiveCount = 0;
       int subscribedCount = 0;
@@ -100,10 +103,10 @@ class FirebaseService {
     }
   }
 
-
-  Future<Map<String, dynamic>>  fetchUserById(String userId) async {
+  Future<Map<String, dynamic>> fetchUserById(String userId) async {
     try {
-      DocumentSnapshot doc = await _firestore.collection('client').doc(userId).get();
+      DocumentSnapshot doc =
+          await _firestore.collection('client').doc(userId).get();
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>;
         final personalDetails = data['personalDetails'] ?? {};
@@ -111,27 +114,33 @@ class FirebaseService {
         final career_studies = data['career_studies'] ?? {};
         final contactinfo = data['contactInfo'] ?? {};
 
-        final countryCode = contactinfo['mobile_country_code'] ?? ''; // Default to empty string if no country code
-        final mobileNumber = contactinfo['mobile'] ?? ''; // Default to empty string if no mobile number
-       final address = contactinfo['address'] ?? '';
-       final house_number = address['house_number']?? '';
-        final home = address['home']?? '';
-        final lane = address['lane']?? '';
-        final city = address['city']?? '';
-        final country = address['country']?? '';
-      final lifestyle = data['lifestyle'] ?? {};
+        final countryCode = contactinfo['mobile_country_code'] ??
+            ''; // Default to empty string if no country code
+        final mobileNumber = contactinfo['mobile'] ??
+            ''; // Default to empty string if no mobile number
+        final address = contactinfo['address'] ?? '';
+        final house_number = address['house_number'] ?? '';
+        final home = address['home'] ?? '';
+        final lane = address['lane'] ?? '';
+        final city = address['city'] ?? '';
+        final country = address['country'] ?? '';
+        final lifestyle = data['lifestyle'] ?? {};
         final profileImages = data['profileImages'] ?? {};
 
-        final imageGallery = profileImages['images']?['gallery_image_urls'] ?? [];
+        final imageGallery =
+            profileImages['images']?['gallery_image_urls'] ?? [];
         final userImages = (imageGallery as List).take(3).toList();
 
-
         // Format the contact number as "country code + mobile number"
-        final formattedContact = countryCode.isNotEmpty && mobileNumber.isNotEmpty
-            ? '$countryCode$mobileNumber'
-            : 'N/A'; // If either is missing, return 'N/A'
+        final formattedContact =
+            countryCode.isNotEmpty && mobileNumber.isNotEmpty
+                ? '$countryCode$mobileNumber'
+                : 'N/A'; // If either is missing, return 'N/A'
 
-        final formattedAddress = house_number.isNotEmpty && home.isNotEmpty && lane.isNotEmpty && city.isNotEmpty
+        final formattedAddress = house_number.isNotEmpty &&
+                home.isNotEmpty &&
+                lane.isNotEmpty &&
+                city.isNotEmpty
             ? '$house_number, $home,$lane,$city,$country.'
             : 'N/A';
 
@@ -149,12 +158,12 @@ class FirebaseService {
           'mothers_name': data['mothers_name'] ?? 'N/A',
           'contact': formattedContact, // Use the formatted contact number
           'no_of_siblings': data['no_of_siblings'] ?? 0,
-          'hobbies' : lifestyle['hobbies'] ?? 'N/A',
-          'Favorites' : lifestyle['personal_interest']  ?? 'N/A',
-          'Alcohol' : lifestyle['habbits'] ?? 'N/A',
-          'sports' : data['sports'] ?? 'N/A',
-          'cooking' :data['cooking'] ?? 'N/A',
-          'Bio' : personalDetails['bio'] ?? 'N/A',
+          'hobbies': lifestyle['hobbies'] ?? 'N/A',
+          'Favorites': lifestyle['personal_interest'] ?? 'N/A',
+          'Alcohol': lifestyle['habbits'] ?? 'N/A',
+          'sports': data['sports'] ?? 'N/A',
+          'cooking': data['cooking'] ?? 'N/A',
+          'Bio': personalDetails['bio'] ?? 'N/A',
           'images': userImages,
         };
       } else {
