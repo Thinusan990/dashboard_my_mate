@@ -10,14 +10,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: ResponsiveContainer(),
+          child: PackageChart(),
         ),
       ),
     );
   }
 }
 
-class ResponsiveContainer extends StatelessWidget {
+class PackageChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -82,22 +82,22 @@ class ResponsiveContainer extends StatelessWidget {
         ),
       ),
       Container(
-        width: 60, // Fixed width
-        height: 30, // Fixed height
+        width: 60,
+        height: 30, 
         alignment: Alignment.centerRight, // Align text to the right
-        padding: EdgeInsets.symmetric(horizontal: 12), // Inner padding
+        padding: const EdgeInsets.symmetric(horizontal: 12), // Inner padding
         decoration: BoxDecoration(
-          color: Colors.white, // Background color
-          border: Border.all(color: Color(0xFFE6E6E6), width: 1), // Border
+          color: Colors.white, 
+          border: Border.all(color: const Color(0xFFE6E6E6), width: 1), 
           borderRadius: BorderRadius.circular(12), // Rounded corners
         ),
         child: Text(
           count,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontWeight: FontWeight.w400,
             fontSize: 16,
-            height: 1.2, // Line height adjustment
+            height: 1.2,      // Line height adjustment
             color: Color(0xFF6F6F6F),
           ),
         ),
