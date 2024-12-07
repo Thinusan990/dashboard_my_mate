@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dashboard_my_mate/MyMateThemes.dart'; // Assuming you have this file for themes
+import 'package:dashboard_my_mate/MyMateThemes.dart'; 
 
 void main() {
   runApp(MaterialApp(
@@ -45,8 +45,8 @@ class RasiChart extends StatelessWidget {
 // Common chart widget to reduce redundancy
 Widget chartWidget(String chartTitle) {
   return Container(
-    height: 300,
-    width: 300,
+    height: 258,
+    width: 258,
     decoration: BoxDecoration(
       color: MyMateThemes.backgroundColor, // Main container background color
       borderRadius: BorderRadius.circular(5), // Rounded corners
