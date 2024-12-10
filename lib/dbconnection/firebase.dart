@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Fetch all users from the `clients` collection
   // Future<List<Map<String, dynamic>>> fetchUsers() async {
   //   try {
   //     QuerySnapshot snapshot = await _firestore.collection('client').get();

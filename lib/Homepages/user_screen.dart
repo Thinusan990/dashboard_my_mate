@@ -1,8 +1,11 @@
+import 'package:dashboard_my_mate/users_details/expectations.dart';
 import 'package:flutter/material.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:dashboard_my_mate/Homepages/tokens_screen.dart';
 
 import '../dbconnection/firebase.dart';
+import '../user_chart/User_chart.dart';
+import '../users_details/user_package.dart';
 
 class UserScreen extends StatefulWidget {
   final String userId;
@@ -548,7 +551,7 @@ class _UserScreenState extends State<UserScreen> {
                             ? aboutmeWidget(userData)
                             : _selectedTabIndex == 1
                             ? moreaboutmeWidget(userData)
-                            : Center(child: Text("Expectations Section Coming Soon!"));
+                            : Center(child: Expectationchart());
 
                       } else {
                         return Center(child: Text('No data available'));
@@ -569,6 +572,7 @@ class _UserScreenState extends State<UserScreen> {
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(8),
             ),
+            child: User_chart()
           ),
         ),
         Expanded(
@@ -580,6 +584,8 @@ class _UserScreenState extends State<UserScreen> {
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(8),
             ),
+            child: UserpackageWidget(),
+
           ),
         ),
       ],

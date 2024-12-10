@@ -1,24 +1,94 @@
 import 'package:flutter/material.dart';
-import 'package:dashboard_my_mate/MyMateThemes.dart'; // Assuming you have this file for themes
+import 'package:dashboard_my_mate/MyMateThemes.dart';
 
+class User_chart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Container(
+          width: 422,
+          height: 748,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: const Color(0xFFE6E6E6),
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 10), // Top Padding
+
+              // Integrated CombinedChart
+              Expanded(
+                child: CombinedChart(),
+              ),
+
+              // Place of Birth and Time of Birth
+              const SizedBox(height: 5, width:10),
+
+              _buildLabelRow(
+                label: "Place of Birth :",
+                value: "Jaffna, Sri Lanka",
+              ),
+              const SizedBox(width: 10),
+
+              _buildLabelRow(
+                label: "Time of Birth :",
+                value: "11 : 45 PM",
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper method for creating rows
+  Widget _buildLabelRow({required String label, required String value}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 55.0), // Adjust padding as needed
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start, // Align text to the left
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF6F6F6F),
+            ),
+          ),
+          const SizedBox(width: 40), // Small space between label and value
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Color(0xFF6F6F6F),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class CombinedChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyMateThemes.backgroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            NavamsaChart(), // The first chart
-            SizedBox(height: 20), // Space between the two charts
-            RasiChart(), // The second chart
-            SizedBox(height: 20), // Space below the charts
-            // Place and Time of Birth information
-          ],
-        ),
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        NavamsaChart(), // The first chart
+        SizedBox(height: 20), // Space between the two charts
+        RasiChart(), // The second chart
+      ],
     );
   }
 }
@@ -40,8 +110,8 @@ class RasiChart extends StatelessWidget {
 // Common chart widget to reduce redundancy
 Widget chartWidget(String chartTitle) {
   return Container(
-    height: 300,
-    width: 300,
+    height: 258,
+    width: 258,
     decoration: BoxDecoration(
       color: MyMateThemes.backgroundColor, // Main container background color
       borderRadius: BorderRadius.circular(5), // Rounded corners
@@ -82,26 +152,28 @@ Widget chartWidget(String chartTitle) {
                 SizedBox(height: 8),
                 // Placeholder for the circular graphic
                 Container(
-                  height:40, // Height based on your image size
+                  height: 40, // Height based on your image size
                   width: 40, // Width based on your image size
                   child: Stack(
                     children: [
                       // First image (img1)
                       Positioned(
-                        child: Image.asset('images/img2.png',  // Use the relative path as per your assets folder
-                          height: 40,       // Match image height
-                          width: 40,           // Match image width
-                          fit: BoxFit.cover,   // Adjust as needed to fit the container
+                        child: Image.asset(
+                          'images/img2.png', // Use the relative path as per your assets folder
+                          height: 40, // Match image height
+                          width: 40, // Match image width
+                          fit: BoxFit.cover, // Adjust as needed to fit the container
                         ),
                       ),
                       // Second image (img2)
                       Positioned(
-                        left: 15,  // Adjust as per your requirement
-                        top: 15,   // Adjust as per your requirement
-                        child: Image.asset('images/img1.png',  // Use the relative path as per your assets folder
-                          height: 10,       // Match image height
-                          width: 10,           // Match image width
-                          fit: BoxFit.cover,   // Adjust as needed to fit the container
+                        left: 15, // Adjust as per your requirement
+                        top: 15, // Adjust as per your requirement
+                        child: Image.asset(
+                          'images/img1.png', // Use the relative path as per your assets folder
+                          height: 10, // Match image height
+                          width: 10, // Match image width
+                          fit: BoxFit.cover, // Adjust as needed to fit the container
                         ),
                       ),
                     ],
@@ -111,10 +183,12 @@ Widget chartWidget(String chartTitle) {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hastam',
+                    Text(
+                      'Hastam',
                       style: MyMateThemes.textStyleBoldWhite,
                     ),
-                    Text('Virgo (கன்னி)',
+                    Text(
+                      'Virgo (கன்னி)',
                       style: MyMateThemes.textStyleSmallWhite,
                     ),
                   ],
@@ -200,3 +274,4 @@ Widget rowTextWidget(String englishText, String tamilText) {
     ],
   );
 }
+
