@@ -11,9 +11,12 @@ import 'package:dashboard_my_mate/widgets/userstatics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'Homepages/PromoDetailPage.dart';
+import 'Homepages/UserbasedPromodetailpage.dart';
+import 'Homepages/timebasedPromoDetailPage.dart';
 import 'Homepages/manage_user.dart';
 import 'Homepages/tokens_screen.dart';
+import 'Homepages/unlimitedUserbasedPromodetails.dart';
+import 'Homepages/unlimitedtimebasedPromodetails.dart';
 import 'Homepages/user_screen.dart';
 import 'widgets/api_users.dart';
 
@@ -53,7 +56,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  Promodetailpage(),
+      home:  unlimitedtimebasedPromodetailpage(),
     );
   }
 }
