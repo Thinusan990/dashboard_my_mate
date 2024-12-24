@@ -1,7 +1,8 @@
+import 'package:dashboard_my_mate/Homepages/PackagepromoWidget.dart';
+import 'package:dashboard_my_mate/MymateThemes.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class PromosOffersPage extends StatefulWidget {
   @override
@@ -30,6 +31,8 @@ class _PromosOffersPageState extends State<PromosOffersPage> {
           ),
           Expanded(
             flex: 8,
+            child:Container(
+              color: Mymatethemes.backgroundColor,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -55,13 +58,22 @@ class _PromosOffersPageState extends State<PromosOffersPage> {
                       Spacer(),
                       ElevatedButton.icon(
                         onPressed: () {},
-                        icon: Icon(Icons.add),
-                        label: Text('create promo'),
+                        icon: Icon(Icons.add,color: Colors.white,),
+                        label: Text('create promo',
+                        style: TextStyle(color: Colors.white),),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Mymatethemes.add_editbtn
+                        ),
                       ),
-                      SizedBox(
-                        width: 4,
-                        height: 5,
+                      VerticalDivider(
+
+                        thickness: 1,
+                        color: Colors.grey,
                       ),
+                        // SizedBox(
+                        //   width: 4,
+                        //   height: 5,
+                        // ),
                       SizedBox(
                         width: 200,
                         child: TextField(
@@ -75,7 +87,7 @@ class _PromosOffersPageState extends State<PromosOffersPage> {
                             hintText: 'Search',
                             prefixIcon: Icon(Icons.search),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16.0),
+                              borderRadius: BorderRadius.circular(12.0),
                             ),
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 8),
@@ -99,10 +111,17 @@ class _PromosOffersPageState extends State<PromosOffersPage> {
                 Expanded(
                   child: _selectedTabIndex == 0
                       ? _buildactivepromoView()
-                      : Text('Reconstruction'),
+                      :  _selectedTabIndex == 1
+                      ? PackagepromoWidget()
+                      :  _selectedTabIndex == 2
+                      ? _buildUpcomingpromoView()
+                      :  _selectedTabIndex == 3
+                      ? _buildExpiredpromoView()
+                      :Text('data')
                 ),
               ],
             ),
+          )
           )
         ],
       ),
@@ -236,6 +255,201 @@ class _PromosOffersPageState extends State<PromosOffersPage> {
   }
 }
 
+Widget _buildUpcomingpromoView() {
+  return Center(
+      child: Container(
+          height: 950,
+          width: 1250,
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                )
+              ]),
+          child: Column(
+              children: [
+                Row(children: [
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 1',
+                    datefrom: '12/02/2020',
+                    dateto: '12/03/2020',
+                    timefrom: '11:00 AM',
+                    timeto: '2:00 PM',
+                    remainingday: 0,
+                    remaininghr: 0,
+                    remainingmn: 0,
+                  ),
+                  SizedBox(
+                    height: 16,
+                    width: 15,
+                  ),
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 2',
+                    datefrom: '15/02/2020',
+                    dateto: '20/03/2020',
+                    timefrom: '10:00 AM',
+                    timeto: '4:00 PM',
+                    remainingday: 5,
+                    remaininghr: 12,
+                    remainingmn: 30,
+                  ),
+                  SizedBox(width: 18),
+                  _buildsplpromocard(
+                    // context: context,
+                    title: 'Promo 3',
+                    totalusers: 100,
+                    remainingusers: 33,
+                  ),
+                ]),
+                Row(children: [
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 4',
+                    datefrom: '12/02/2020',
+                    dateto: '12/03/2020',
+                    timefrom: '11:00 AM',
+                    timeto: '2:00 PM',
+                    remainingday: 0,
+                    remaininghr: 0,
+                    remainingmn: 0,
+                  ),
+                  SizedBox(
+                    height: 16,
+                    width: 15,
+                  ),
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 5',
+                    datefrom: '15/02/2020',
+                    dateto: '20/03/2020',
+                    timefrom: '10:00 AM',
+                    timeto: '4:00 PM',
+                    remainingday: 5,
+                    remaininghr: 12,
+                    remainingmn: 30,
+                  ),
+                  SizedBox(width: 18),
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 6',
+                    datefrom: '01/03/2020',
+                    dateto: '10/03/2020',
+                    timefrom: '9:00 AM',
+                    timeto: '5:00 PM',
+                    remainingday: 2,
+                    remaininghr: 4,
+                    remainingmn: 15,
+                  ),
+                ]),
+              ])));
+}
+
+  Widget _buildExpiredpromoView() {
+  return Center(
+      child: Container(
+          height: 950,
+          width: 1250,
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                )
+              ]),
+          child: Column(
+              children: [
+                Row(children: [
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 1',
+                    datefrom: '12/02/2020',
+                    dateto: '12/03/2020',
+                    timefrom: '11:00 AM',
+                    timeto: '2:00 PM',
+                    remainingday: 0,
+                    remaininghr: 0,
+                    remainingmn: 0,
+                  ),
+                  SizedBox(
+                    height: 16,
+                    width: 15,
+                  ),
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 2',
+                    datefrom: '15/02/2020',
+                    dateto: '20/03/2020',
+                    timefrom: '10:00 AM',
+                    timeto: '4:00 PM',
+                    remainingday: 5,
+                    remaininghr: 12,
+                    remainingmn: 30,
+                  ),
+                  SizedBox(width: 18),
+                  _buildsplpromocard(
+                    // context: context,
+                    title: 'Promo 3',
+                    totalusers: 100,
+                    remainingusers: 33,
+                  ),
+                ]),
+                Row(children: [
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 4',
+                    datefrom: '12/02/2020',
+                    dateto: '12/03/2020',
+                    timefrom: '11:00 AM',
+                    timeto: '2:00 PM',
+                    remainingday: 0,
+                    remaininghr: 0,
+                    remainingmn: 0,
+                  ),
+                  SizedBox(
+                    height: 16,
+                    width: 15,
+                  ),
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 5',
+                    datefrom: '15/02/2020',
+                    dateto: '20/03/2020',
+                    timefrom: '10:00 AM',
+                    timeto: '4:00 PM',
+                    remainingday: 5,
+                    remaininghr: 12,
+                    remainingmn: 30,
+                  ),
+                  SizedBox(width: 18),
+                  _buildpromocard(
+                    // context: context,
+                    title: 'Promo 6',
+                    datefrom: '01/03/2020',
+                    dateto: '10/03/2020',
+                    timefrom: '9:00 AM',
+                    timeto: '5:00 PM',
+                    remainingday: 2,
+                    remaininghr: 4,
+                    remainingmn: 15,
+                  ),
+                ]),
+              ])));
+}
+
+
 Widget _buildpromocard({
   // required BuildContext context,
   required String datefrom,
@@ -277,7 +491,7 @@ Widget _buildpromocard({
             children: [
               Text(
                 'Duration',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -293,7 +507,7 @@ Widget _buildpromocard({
             children: [
               Text(
                 'Time',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -309,7 +523,7 @@ Widget _buildpromocard({
             children: [
               Text(
                 'Time Remaining',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -330,7 +544,7 @@ Widget _buildpromocard({
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.deepOrange,
+          color: Color(0xFFFFC05B),
           border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(8),
         ),
@@ -338,7 +552,7 @@ Widget _buildpromocard({
           title,
           style: TextStyle(
             fontSize: 14,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.normal,
             color: Colors.white70,
           ),
         ),
@@ -385,7 +599,8 @@ Widget _buildsplpromocard({
             children: [
               Text(
                 'Total users',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal
+                ),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -400,7 +615,7 @@ Widget _buildsplpromocard({
             children: [
               Text(
                 'Remaining users',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -419,7 +634,7 @@ Widget _buildsplpromocard({
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.deepOrange,
+          color: Color(0xFFFFC05B),
           border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(8),
         ),
@@ -427,7 +642,7 @@ Widget _buildsplpromocard({
           title,
           style: TextStyle(
             fontSize: 14,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.normal,
             color: Colors.white70,
           ),
         ),
@@ -448,7 +663,7 @@ Widget _buildPriceBox(String value, String label) {
         alignment: Alignment.center,
         child: Text(
           value,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
         ),
       ),
       SizedBox(height: 8),
@@ -457,5 +672,12 @@ Widget _buildPriceBox(String value, String label) {
         style: TextStyle(fontSize: 14, color: Colors.grey),
       ),
     ],
+  );
+}
+
+
+Widget _buildpackagepromoView(){
+  return Column(
+
   );
 }

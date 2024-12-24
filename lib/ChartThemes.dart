@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
-class MyMateThemes {
+class ChartThemes {
   static const Color backgroundColor = Color(0xFFF5F5F7);
   static const Color boxColor = Color(0xFF3C3C3C);
   static const Color whiteColor = Colors.white;
   static const Color blackColor = Colors.black;
+
+
+
+
+
+
 
   static final BoxDecoration boxDecoration = BoxDecoration(
     color: boxColor,

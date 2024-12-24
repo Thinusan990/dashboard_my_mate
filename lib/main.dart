@@ -1,6 +1,7 @@
 import 'package:dashboard_my_mate/Homepages/home_screen.dart';
 import 'package:dashboard_my_mate/Homepages/promos_offers_page.dart';
 import 'package:dashboard_my_mate/client.dart';
+import 'package:dashboard_my_mate/dbconnection/clients.dart';
 import 'package:dashboard_my_mate/firebase_options.dart';
 import 'package:dashboard_my_mate/user_chart/User_chart.dart';
 import 'package:dashboard_my_mate/widgets/multiplepichart.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  unlimitedtimebasedPromodetailpage(),
+      home:  ManageUsers(),
     );
   }
 }

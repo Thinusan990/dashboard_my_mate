@@ -34,7 +34,8 @@ class _unlimitedtimebasedPromodetailpageState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Title
+                        Row(
+                      children: [
                         Container(
                           height: 20,
                           margin: const EdgeInsets.only(bottom: 16),
@@ -44,8 +45,16 @@ class _unlimitedtimebasedPromodetailpageState
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
-
-                        // Header Row
+                        Spacer(),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                           backgroundColor: Colors.red,
+                          ),
+                          onPressed: () { },
+                          child: Text('Expired'),
+                        )
+                             ]
+                        ),
                         Container(
                           height: 40,
                           decoration: BoxDecoration(

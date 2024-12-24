@@ -34,17 +34,27 @@ class _unlimitedUserbasedPromodetailpageState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Title
-                        Container(
-                          height: 20,
-                          margin: const EdgeInsets.only(bottom: 16),
-                          child: Text(
-                            'Promo 1',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
+                        Row(
+                            children: [
+                              Container(
+                                height: 20,
+                                margin: const EdgeInsets.only(bottom: 16),
+                                child: Text(
+                                  'Promo 1',
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Spacer(),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                onPressed: () { },
+                                child: Text('Expired'),
+                              )
+                            ]
                         ),
-
                         Container(
                           height: 40,
                           decoration: BoxDecoration(
@@ -613,7 +623,6 @@ class _promographWidget extends State<promographWidget> {
                 color: Color(0xFF001240),
                 child: Stack(
                   children: [
-                    // Graph Positioned at the center
                     Positioned(
                       top: 20,
                       left: 30,

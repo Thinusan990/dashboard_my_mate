@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dashboard_my_mate/MyMateThemes.dart';
+import 'package:dashboard_my_mate/ChartThemes.dart';
 
 class User_chart extends StatelessWidget {
   @override
@@ -113,7 +113,7 @@ Widget chartWidget(String chartTitle) {
     height: 258,
     width: 258,
     decoration: BoxDecoration(
-      color: MyMateThemes.backgroundColor, // Main container background color
+      color: ChartThemes.backgroundColor, // Main container background color
       borderRadius: BorderRadius.circular(5), // Rounded corners
     ),
     child: Stack(
@@ -141,13 +141,13 @@ Widget chartWidget(String chartTitle) {
           child: Container(
             height: 114,
             width: 114,
-            decoration: MyMateThemes.centerBoxDecoration,
+            decoration: ChartThemes.centerBoxDecoration,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   chartTitle,
-                  style: MyMateThemes.textStyleSmallWhite,
+                  style: ChartThemes.textStyleSmallWhite,
                 ),
                 SizedBox(height: 8),
                 // Placeholder for the circular graphic
@@ -185,11 +185,11 @@ Widget chartWidget(String chartTitle) {
                   children: [
                     Text(
                       'Hastam',
-                      style: MyMateThemes.textStyleBoldWhite,
+                      style: ChartThemes.textStyleBoldWhite,
                     ),
                     Text(
                       'Virgo (கன்னி)',
-                      style: MyMateThemes.textStyleSmallWhite,
+                      style: ChartThemes.textStyleSmallWhite,
                     ),
                   ],
                 ),
@@ -206,7 +206,7 @@ Widget individualBox(String number) {
   return Container(
     height: 52,
     width: 52,
-    decoration: MyMateThemes.boxDecoration,
+    decoration: ChartThemes.boxDecoration,
     child: Stack(
       children: [
         // Number part
@@ -244,7 +244,7 @@ Widget individualBox(String number) {
 Widget numberWidget(String number) {
   return Text(
     number,
-    style: MyMateThemes.textStyleExtraSmallWhite.copyWith(
+    style: ChartThemes.textStyleExtraSmallWhite.copyWith(
       fontSize: 6,
       height: 7 / 6,
       fontWeight: FontWeight.w600,
@@ -258,7 +258,7 @@ Widget rowTextWidget(String englishText, String tamilText) {
     children: [
       Text(
         englishText,
-        style: MyMateThemes.textStyleSmallWhite.copyWith(
+        style: ChartThemes.textStyleSmallWhite.copyWith(
           fontSize: 12,
           height: 14 / 12,
         ),
@@ -266,7 +266,7 @@ Widget rowTextWidget(String englishText, String tamilText) {
       SizedBox(width: 3), // Space between "Ma" and "செவ்"
       Text(
         tamilText,
-        style: MyMateThemes.textStyleExtraSmallWhite.copyWith(
+        style: ChartThemes.textStyleExtraSmallWhite.copyWith(
           fontSize: 4,
           height: 5 / 4,
         ),

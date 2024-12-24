@@ -1,14 +1,13 @@
 import 'package:dashboard_my_mate/users_details/expectations.dart';
 import 'package:flutter/material.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
-import 'package:dashboard_my_mate/Homepages/tokens_screen.dart';
 
-import '../dbconnection/firebase.dart';
+import '../APIs/Userprofile.dart';
 import '../user_chart/User_chart.dart';
 import '../users_details/user_package.dart';
 
 class UserScreen extends StatefulWidget {
-  final String userId;
+  final String  userId;
 
     const UserScreen({Key? key, required this.userId}) : super(key: key);
 
@@ -31,7 +30,7 @@ class _UserScreenState extends State<UserScreen> {
   @override
   void initState() {
     super.initState();
-    _userDetails = FirebaseService().fetchUserById(widget.userId);
+    _userDetails = fetchUserById(widget.userId);
   }
 
   Widget aboutmeWidget(Map<String, dynamic> userData) {
@@ -59,6 +58,7 @@ class _UserScreenState extends State<UserScreen> {
             _buildRow('Religion', userData['religion'] ?? 'N/A'),
             _buildRow('Caste', userData['caste'] ?? 'N/A'),
             _buildRow('Contact No', userData['contact'] ?? 'N/A'),
+
           ],
         ),
       ),
@@ -85,18 +85,36 @@ class _UserScreenState extends State<UserScreen> {
                 ? '${userData['hobbies']}'
                 : 'N/A'),
             _buildRow('Favorites',
-                userData['Favorites'] ?? 'N/A'),
+                userData['favorites'] ?? 'N/A'),
             _buildRow('Alcohol',
                 userData['alcohol'] ?? 'N/A'),
             _buildRow('sports', userData['sports'] ?? 'N/A'),
             _buildRow('cooking', userData['cooking'] ?? 'N/A'),
-            _buildRow('Bio', userData['Bio'], isBio: true),
+            _buildRow('Bio', userData['bio'], isBio: true),
             _buildPhotoSection('photo', userData['images'] ?? 'N/A'),
           ],
         ),
       ),
     );
   }
+  Widget _buildList(dynamic data) {
+    if (data is List) {
+      if (data.isEmpty) {
+        return Text('No items available');
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: data.map((item) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(item.toString(), style: TextStyle(fontSize: 16)),
+          );
+        }).toList(),
+      );
+    }
+    return Text('N/A');  // Fallback if data is not a list
+  }
+
 
   Widget _buildRow(String title, dynamic value, {bool isBio = false}) {
     return Padding(
@@ -125,8 +143,8 @@ class _UserScreenState extends State<UserScreen> {
                 const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Color(0xFFE6E6E6)), // Border color
-                  borderRadius: BorderRadius.circular(15), // Rounded corners
+                  border: Border.all(color: Color(0xFFE6E6E6)),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,

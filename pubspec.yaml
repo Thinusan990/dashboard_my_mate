@@ -41,6 +41,7 @@ dependencies:
   table_calendar: ^3.0.4
   intl: ^0.18.0
   percent_indicator: ^4.2.2
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:

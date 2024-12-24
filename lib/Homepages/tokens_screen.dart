@@ -1,3 +1,4 @@
+import 'package:dashboard_my_mate/MymateThemes.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,8 @@ class _TokensScreenState extends State<TokensScreen> {
       ),
       Expanded(
         flex: 8,
+        child:Container(
+          color: Mymatethemes.backgroundColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -35,7 +38,7 @@ class _TokensScreenState extends State<TokensScreen> {
               margin: const EdgeInsets.only(bottom: 16),
               child: Text(
                 'Tokens',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18),
               ),
             ),
             Container(
@@ -53,13 +56,25 @@ class _TokensScreenState extends State<TokensScreen> {
                   Spacer(),
                   ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.tune),
-                    label: Text('Customize'),
+                    icon: Icon(Icons.tune,
+                    color: Mymatethemes.textcolor,),
+                    label: Text('Customize',
+                      style:TextStyle(color: Mymatethemes.textcolor) ,),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Mymatethemes.commonbuttonclr,
+                          side:BorderSide.none
+                    ),
                   ),
                   ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.settings),
-                    label: Text('Settings'),
+                    icon: Icon(Icons.settings,
+                      color: Mymatethemes.textcolor,),
+                    label: Text('Settings',
+                      style:TextStyle(color: Mymatethemes.textcolor) ,),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Mymatethemes.commonbuttonclr,
+                        side:BorderSide.none
+                    ),
                   ),
                   Container(
                     width: 1,
@@ -107,7 +122,7 @@ class _TokensScreenState extends State<TokensScreen> {
             ),
           ],
         ),
-      )
+      ))
     ])));
   }
 
@@ -145,7 +160,7 @@ class _TokensScreenState extends State<TokensScreen> {
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Mymatethemes.backgroundColor,
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
@@ -165,11 +180,12 @@ class _TokensScreenState extends State<TokensScreen> {
           children: [
             _buildTokenCard(
               title: 'Basic',
-              titlecolor: Colors.grey,
+              titlecolor: Mymatethemes.basic,
+              boxcolor: Color(0xFFF6F6F6),
               priceWorldWide: '10 \$',
               priceLocal: '3000 LKR',
               tokens: '30 ',
-              color: Colors.white70,
+              color: Mymatethemes.backgroundColor,
               matchDays: '1',
               matchHours: '0',
               searchDays: '1',
@@ -179,11 +195,12 @@ class _TokensScreenState extends State<TokensScreen> {
             ),
             _buildTokenCard(
               title: 'Standard',
-              titlecolor: Colors.green,
+              titlecolor: Mymatethemes.standard,
+              boxcolor: Color(0xFFF6F6F6),
               priceWorldWide: '15 \$',
               priceLocal: '4500 LKR',
               tokens: '50 ',
-              color: Colors.white70,
+              color: Mymatethemes.backgroundColor,
               matchDays: '3',
               matchHours: '0',
               searchDays: '3',
@@ -193,11 +210,12 @@ class _TokensScreenState extends State<TokensScreen> {
             ),
             _buildTokenCard(
               title: 'Premium',
-              titlecolor: Colors.redAccent,
+              titlecolor: Mymatethemes.premium,
+              boxcolor: Color(0xFFFFF5F4),
               priceWorldWide: '20 \$',
               priceLocal: '6000 LKR',
               tokens: '80 ',
-              color: Colors.white70,
+              color: Mymatethemes.backgroundColor,
               matchDays: '7',
               matchHours: '0',
               searchDays: '7',
@@ -212,63 +230,61 @@ class _TokensScreenState extends State<TokensScreen> {
   }
 
   Widget _buildTokenChargesView() {
-    return Container(
-      height: 800,
-      padding: const EdgeInsets.all(32.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: Offset(0, 4), // Shadow position
+    return Stack(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Mymatethemes.backgroundColor,
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(color: Colors.grey.shade300),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _buildTokenChargeRow('Check match ', '2'),
-          _buildTokenChargeRow('Send interest', '1'),
-          _buildTokenChargeRow('Accept interest', '1'),
-          _buildTokenChargeRow('Boost profile', '3'),
-          _buildTokenChargeRow('Super Boost Profile', '5'),
-          SizedBox(height: 5),
-          Align(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10.0, left: 32.0),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text('Edit'),
-                style: ElevatedButton.styleFrom(),
-              ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTokenChargeRow('Check match', '2'),
+              _buildTokenChargeRow('Send interest', '1'),
+              _buildTokenChargeRow('Accept interest', '1'),
+              _buildTokenChargeRow('Boost profile', '3'),
+              _buildTokenChargeRow('Super Boost Profile', '5'),
+            ],
+          ),
+        ),
+
+        Positioned(
+          left: 370,
+          top: 450,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text('Edit',style: TextStyle(color:Colors.white),),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Mymatethemes.add_editbtn,
+                shape:RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                )
+
+
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildTokenChargeRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
+          Container(
+            width: 350, // Fixed width for label column
             child: Text(
               label,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 16),
             ),
           ),
-
-          // SizedBox(width: 1),
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.only(left: 1.0),
-            child: _buildPriceBox(value, 'Tokens'),
-          )),
+          _buildPriceBox(value, 'Tokens'),
         ],
       ),
     );
@@ -281,6 +297,7 @@ class _TokensScreenState extends State<TokensScreen> {
     required String priceLocal,
     required String tokens,
     required Color color,
+    required Color boxcolor,
     required String matchDays,
     required String matchHours,
     required String searchDays,
@@ -307,12 +324,13 @@ class _TokensScreenState extends State<TokensScreen> {
                 children: [
                   Text(
                     'Price',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 16,color: Colors.grey),
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       _buildPriceBox(priceWorldWide, 'Worldwide'),
+                      SizedBox(width: 2),
                       _buildPriceBox(priceLocal, 'In Sri Lanka'),
                     ],
                   ),
@@ -324,7 +342,7 @@ class _TokensScreenState extends State<TokensScreen> {
                 children: [
                   Text(
                     'No of Tokens',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 16,color: Colors.grey),
                   ),
                   _buildTokenBox(tokens),
                 ],
@@ -361,8 +379,15 @@ class _TokensScreenState extends State<TokensScreen> {
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: Text('Edit'),
-                  style: ElevatedButton.styleFrom(),
+                  child: Text('Edit',style: TextStyle(color:Colors.white),),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Mymatethemes.add_editbtn,
+                    shape:RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    )
+
+
+                  ),
                 ),
               ),
             ],
@@ -374,7 +399,7 @@ class _TokensScreenState extends State<TokensScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.grey[400],
+              color: boxcolor,
               border: Border.all(color: Colors.grey.shade300),
               borderRadius: BorderRadius.circular(8),
             ),
@@ -382,7 +407,6 @@ class _TokensScreenState extends State<TokensScreen> {
               title,
               style: TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.bold,
                 color: titlecolor,
               ),
             ),
@@ -396,7 +420,7 @@ class _TokensScreenState extends State<TokensScreen> {
     return Column(
       children: [
         Container(
-          width: 100,
+          width: 80,
           height: 40,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
@@ -406,7 +430,7 @@ class _TokensScreenState extends State<TokensScreen> {
           alignment: Alignment.center,
           child: Text(
             price,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 14,color: Colors.grey),
           ),
         ),
         SizedBox(height: 8),
@@ -432,7 +456,7 @@ class _TokensScreenState extends State<TokensScreen> {
           alignment: Alignment.center,
           child: Text(
             token,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 14,color: Colors.grey),
           ),
         ),
       ],

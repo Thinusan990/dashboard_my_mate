@@ -33,14 +33,26 @@ class _TimebasedPromodetailpageState extends State<TimebasedPromodetailpage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 20,
-                        margin: const EdgeInsets.only(bottom: 16),
-                        child: Text(
-                          'Promo 1',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
+                      Row(
+                          children: [
+                            Container(
+                              height: 20,
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: Text(
+                                'Promo 1',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Spacer(),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
+                              onPressed: () { },
+                              child: Text('Expired'),
+                            )
+                          ]
                       ),
 
                       Container(

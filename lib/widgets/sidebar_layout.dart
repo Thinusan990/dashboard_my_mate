@@ -1,3 +1,4 @@
+import 'package:dashboard_my_mate/MymateThemes.dart';
 import 'package:flutter/material.dart';
 
 class SidebarLayout extends StatefulWidget {
@@ -14,7 +15,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
   Widget build(BuildContext context) {
     return Container(
       width: 200,
-      color: Color(0xFF424040),
+      color: Mymatethemes.sidemenuColor ,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -24,7 +25,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
             child: Text(
               'My Mate',
               style: TextStyle(
-                color: Colors.white,
+                color: Mymatethemes.sidemenutextcolor,
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
@@ -34,16 +35,18 @@ class _SidebarLayoutState extends State<SidebarLayout> {
             padding: const EdgeInsets.all(2.0),
             child: TextField(
               controller: searchController,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Mymatethemes.sidemenutextcolor),
               decoration: InputDecoration(
                 hintText: "Search",
-                hintStyle: TextStyle(color: Colors.grey),
-                prefixIcon: Icon(Icons.search, color: Colors.white),
+                hintStyle: TextStyle(color:Mymatethemes.sidemenutextcolor),
+                prefixIcon: Icon(Icons.search, color: Mymatethemes.sidemenutextcolor),
                 filled: true,
-                fillColor: Color(0xFF444444),
+                fillColor: Mymatethemes.backgroundColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
+                  borderSide: BorderSide(
+                    color: Colors.grey, // Outline border color
+                    width: 0.5),
                 ),
               ),
               onChanged: (value) {
@@ -71,10 +74,11 @@ class _SidebarLayoutState extends State<SidebarLayout> {
   Widget _buildSidebarItem(IconData icon, String title, double fontSize,
       VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: Colors.white),
+      leading: Icon(icon, color: Mymatethemes.sidemenutextcolor),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white, fontSize: fontSize),
+        style: TextStyle(color: Mymatethemes.sidemenutextcolor,
+             fontSize: fontSize),
       ),
       onTap: onTap,
     );
@@ -84,16 +88,16 @@ class _SidebarLayoutState extends State<SidebarLayout> {
     return ExpansionTile(
       title: Row(
         children: [
-          Icon(Icons.person, color: Colors.white),
+          Icon(Icons.person, color: Mymatethemes.sidemenutextcolor),
           SizedBox(width: 8),
-          Text('Users', style: TextStyle(color: Colors.white)),
+          Text('Users', style: TextStyle(color: Mymatethemes.sidemenutextcolor)),
         ],
       ),
       trailing: Icon(
         isManageUserExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-        color: Colors.white,
+        color: Mymatethemes.sidemenutextcolor,
       ),
-      backgroundColor: Color(0xFF444444),
+      backgroundColor: Mymatethemes.sidemenuColor,
       children: [
         _buildSubSidebarItem("New User", () {}),
         _buildSubSidebarItem("Active User", () {}),
@@ -111,10 +115,10 @@ class _SidebarLayoutState extends State<SidebarLayout> {
 
   Widget _buildSubSidebarItem(String title, Function onPressed) {
     return ListTile(
-      leading: SizedBox(width: 32), // Align with sidebar items
+      leading: SizedBox(width: 32),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Mymatethemes.textcolor),
       ),
       onTap: () => onPressed(),
     );
@@ -125,36 +129,36 @@ class _SidebarLayoutState extends State<SidebarLayout> {
       leading: SizedBox(width: 30),
         title: DropdownButton<String>(
         value: selectedCategory,
-        dropdownColor: Color(0xFF444444),
-        style: TextStyle(color: Colors.white),
+        dropdownColor: Color(0xFFF9FAFB),
+        style: TextStyle(color: Mymatethemes.textcolor),
         underline: Container(),
         // Remove underline
         items: [
           DropdownMenuItem<String>(
             value: "Select Category",
             child: Text(
-                " Category", style: TextStyle(color: Colors.white)),
+                " Category", style: TextStyle(color: Mymatethemes.textcolor)),
           ),
           DropdownMenuItem<String>(
             value: "Category 1",
-            child: Text("Category 1", style: TextStyle(color: Colors.white)),
+            child: Text("Category 1", style: TextStyle(color: Mymatethemes.textcolor)),
           ),
           DropdownMenuItem<String>(
             value: "Category 2",
-            child: Text("Category 2", style: TextStyle(color: Colors.white)),
+            child: Text("Category 2", style: TextStyle(color: Mymatethemes.textcolor)),
           ),
           DropdownMenuItem<String>(
             value: "Category 3",
-            child: Text("Category 3", style: TextStyle(color: Colors.white)),
+            child: Text("Category 3", style: TextStyle(color: Mymatethemes.textcolor)),
           ),
           // Add Category option
           DropdownMenuItem<String>(
             value: "Add Category",
             child: Row(
               children: [
-                Icon(Icons.add, color: Colors.white),
+                Icon(Icons.add, color: Colors.grey),
                 SizedBox(width: 8),
-                Text("Add Category", style: TextStyle(color: Colors.white)),
+                Text("Add Category", style: TextStyle(color:Mymatethemes.textcolor)),
               ],
             ),
           ),
