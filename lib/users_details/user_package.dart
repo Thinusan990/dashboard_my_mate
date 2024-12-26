@@ -5,8 +5,6 @@ class UserpackageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
@@ -14,14 +12,14 @@ class UserpackageWidget extends StatelessWidget {
             body: Center(
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                  width: 390,
-                  height: 750,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: const Color(0xFFE6E6E6),
-                      width: 1.0,
+                      Container(
+                       width: 390,
+                       height: 750,
+                      decoration: BoxDecoration(
+                       color: Colors.white,
+                       border: Border.all(
+                       color: const Color(0xFFE6E6E6),
+                       width: 1.0,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -29,7 +27,6 @@ class UserpackageWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 16, horizontal: 24),
                       child: SingleChildScrollView(
-
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -80,18 +77,18 @@ class UserpackageWidget extends StatelessWidget {
   Widget _buildColoredRow(String title, String count, {required Color color}) {
     return Row(
       children: [
-      Expanded(
-      child: Text(
-          title,
-          style: TextStyle(
-            fontFamily: 'Work Sans',
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
-            color: color,
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: color,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
-        overflow: TextOverflow.ellipsis,
         ),
-      ),
         Container(
           width: 60,
           height: 30,

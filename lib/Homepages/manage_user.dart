@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:dashboard_my_mate/Homepages/user_screen.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import '../MymateThemes.dart';
 import '../dbconnection/firebase.dart';
 import '../widgets/subscriberschart.dart';
@@ -24,8 +22,6 @@ class _ManageUsersState extends State<ManageUsers> {
   Set<String> selectedRows = {};
   final FirebaseService _firebaseService = FirebaseService();
   Map<String, dynamic>? user;
-
-
 
   @override
   void initState() {
@@ -88,15 +84,12 @@ class _ManageUsersState extends State<ManageUsers> {
     }
   }
 
-
   Future<List<Map<String, dynamic>>> _fetchUserProfile() async {
     final url = Uri.parse('https://backend.graycorp.io:9000/mymate/api/v1/getClientDataList');
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        // print('Response body: ${response.body}');
-
         final List<dynamic> data = jsonDecode(response.body);
         return data.map((user) {
           return {
@@ -118,8 +111,6 @@ class _ManageUsersState extends State<ManageUsers> {
     }
   }
 
-
-
   Color _getStatusColor(String user_type) {
     switch (user_type.toLowerCase()) {
       case 'premium':
@@ -135,330 +126,321 @@ class _ManageUsersState extends State<ManageUsers> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: SidebarLayout(),
-            ),
-            Expanded(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            bool isMobile = constraints.maxWidth < 600;
 
-              flex: 8,
-              child: Container(
-                color: Mymatethemes.backgroundColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 20,
-                        margin: const EdgeInsets.only(bottom: 16),
-                        child: Text(
-                          'Users',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(color: Colors.grey, width: 1.0),
-                            bottom: BorderSide(color: Colors.grey, width: 1.0),
+            return Row(
+              children: [
+                if (!isMobile) Expanded(flex: 2, child: SidebarLayout()),
+                Expanded(
+                  flex: isMobile ? 1 : 8,
+                  child: Container(
+                    color: Mymatethemes.backgroundColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 20,
+                            margin: const EdgeInsets.only(bottom: 16),
+                            child: Text(
+                              'Users',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Spacer(),
-                            Row(
-                              children: [
-                                ElevatedButton.icon(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.tune,
-                                    color: Mymatethemes.textcolor,
-                                  ),
-                                  label: Text('Customize',
-                                      style: TextStyle(color: Mymatethemes.textcolor)
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor:Mymatethemes.commonbuttonclr
-                                  ),
+                          if (!isMobile)
+                            Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(color: Colors.grey, width: 1.0),
+                                  bottom: BorderSide(color: Colors.grey, width: 1.0),
                                 ),
-                                ElevatedButton.icon(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.settings,
-                                      color: Mymatethemes.textcolor,
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Spacer(),
+                                  Row(
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.tune,
+                                          color: Mymatethemes.textcolor,
+                                        ),
+                                        label: Text('Customize',
+                                            style: TextStyle(color: Mymatethemes.textcolor)),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Mymatethemes.commonbuttonclr,
+                                        ),
+                                      ),
+                                      ElevatedButton.icon(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.settings,
+                                          color: Mymatethemes.textcolor,
+                                        ),
+                                        label: Text('Settings',
+                                            style: TextStyle(color: Mymatethemes.textcolor)),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Mymatethemes.commonbuttonclr,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    width: 1,
+                                    height: 30,
+                                    margin: EdgeInsets.symmetric(horizontal: 8),
+                                    color: Colors.grey,
+                                  ),                                  SizedBox(
+                                    width: 200,
+                                    child: TextField(
+                                      controller: searchController,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          searchQuery = value.toLowerCase();
+                                        });
+                                      },
+                                      decoration: InputDecoration(
+                                        hintText: 'Search',
+                                        prefixIcon: Icon(Icons.search),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(16.0),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                      ),
                                     ),
-                                    label: Text('Settings',
-                                        style: TextStyle(color: Mymatethemes.textcolor)
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor:Mymatethemes.commonbuttonclr
-                                    )),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          SizedBox(height: 5),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                _buildCountButton('Active', activeCount, Colors.black),
+                                _buildCountButton('Inactive', inactiveCount, Colors.black),
+                                _buildCountButton('Subscribed', subscribedCount, Colors.black),
+                                _buildCountButton('Unsubscribed', unsubscribedCount, Colors.black),
+                                if (!isMobile) _buildCountButton('Suspended', 123, Colors.black),
+                                if (!isMobile) _buildCountButton('Banned', 123, Colors.black),
+                                if (!isMobile) _buildCountButton('New User', 123, Colors.black),
+
+
+                                // Spacer(),
                                 Container(
                                   width: 1,
                                   height: 30,
-                                  margin: EdgeInsets.symmetric(horizontal: 8),
+                                  margin: EdgeInsets.symmetric(horizontal: 0),
                                   color: Colors.grey,
                                 ),
-                                SizedBox(width: 4, height: 5),
-                                SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    controller: searchController,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        searchQuery = value.toLowerCase();
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: 'Search',
-                                      prefixIcon: Icon(Icons.search),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(16.0),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                if (!isMobile)
+                                  ElevatedButton.icon(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.add, color: Mymatethemes.textcolor),
+                                    label: Text('Add New User', style: TextStyle(color: Mymatethemes.textcolor)),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Mymatethemes.commonbuttonclr,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ElevatedButton(
+                                onPressed: selectedRows.isNotEmpty ? () {} : null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: selectedRows.isNotEmpty
+                                      ? Mymatethemes.commonbuttonclr
+                                      : Colors.grey.shade300,
+                                  foregroundColor: selectedRows.isNotEmpty
+                                      ? Colors.black
+                                      : Colors.black38,
+                                ),
+                                child: Text('Delete'),
+                              ),
+                              SizedBox(width: 4),
+                              ElevatedButton(
+                                onPressed: selectedRows.isNotEmpty ? () {} : null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: selectedRows.isNotEmpty
+                                      ? Mymatethemes.commonbuttonclr
+                                      : Colors.grey.shade300,
+                                  foregroundColor: selectedRows.isNotEmpty
+                                      ? Colors.black
+                                      : Colors.black38,
+                                ),
+                                child: Text('Add To'),
+                              ),
+                              SizedBox(width: 4),
+                              Container(
+                                height: 30,
+                                width: 145,
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                decoration: BoxDecoration(
+                                  color: selectedRows.isNotEmpty
+                                      ? Mymatethemes.commonbuttonclr
+                                      : Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(20),
+                                    border: selectedRows.isNotEmpty
+                                        ? Border.all(
+                                      color: Colors.grey.shade300,
+                                      width: 1.0,
+                                    )
+                                        : null,
+                                ),
+                                child: DropdownButton<String>(
+                                  hint: Text(
+                                    "Change Status",
+                                    style: TextStyle(fontSize: 14, color: selectedRows.isNotEmpty ? Colors.black : Colors.grey),
+                                  ),
+                                  underline: SizedBox(),
+                                  onChanged: selectedRows.isNotEmpty
+                                      ? (value) async {
+                                    if (value != null) {
+                                      await _updateUserStatus(selectedRows, value);
+                                    }
+                                  }
+                                      : null,
+                                  items: ["Basic", "Standard", "Premium", "Unsubscribed"]
+                                      .map(
+                                        (status) => DropdownMenuItem<String>(
+                                      value: status.toLowerCase(),
+                                      child: Text(status),
+                                    ),
+                                  )
+                                      .toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 30),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: isMobile ? 1 : 2,
+                                  child: Container(
+                                    height: 750,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey, width: 1),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                                      future: _fetchUserProfile(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                          return Center(child: CircularProgressIndicator());
+                                        } else if (snapshot.hasError) {
+                                          return Center(child: Text('Error fetching data'));
+                                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                          return Center(child: Text('No users found'));
+                                        } else {
+                                          final users = snapshot.data!
+                                              .where((user) => user['full_name'].toLowerCase().contains(searchQuery))
+                                              .toList();
+                                          return SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: DataTable(
+                                              headingRowHeight: 50,
+                                              dataRowHeight: 40,
+                                              columns: [
+                                                DataColumn(label: Text('Username')),
+                                                DataColumn(label: Text('Status')),
+                                                DataColumn(label: Text('Rank No')),
+                                                DataColumn(label: Text('Rank Type')),
+                                                DataColumn(label: Text('Active')),
+                                              ],
+                                              rows: users.map((user) {
+                                                final userTypeColor = _getStatusColor(user['user_type']);
+                                                final isSelected = selectedRows.contains(user['id']);
+                                                return DataRow(
+                                                  selected: isSelected,
+                                                  onSelectChanged: (selected) {
+                                                    setState(() {
+                                                      if (selected == true) {
+                                                        selectedRows.add(user['id'] as String);
+                                                      } else {
+                                                        selectedRows.remove(user['id']);
+                                                      }
+                                                    });
+                                                  },
+                                                  cells: [
+                                                    DataCell(
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  UserScreen(userId: user['id'] as String),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Text(user['full_name']),
+                                                      ),
+                                                    ),
+                                                    DataCell(
+                                                      Container(
+                                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                        decoration: BoxDecoration(
+                                                          color: userTypeColor.withOpacity(0.2),
+                                                          border: Border.all(color: userTypeColor, width: 0.5),
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        child: Text(
+                                                          user['user_type'],
+                                                          style: TextStyle(color: userTypeColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    DataCell(Text(user['rank_no'])),
+                                                    DataCell(Text(user['rank_type'])),
+                                                    DataCell(
+                                                      Icon(
+                                                        user['active'] == 'Active' ? Icons.circle : Icons.circle_outlined,
+                                                        color: user['active'] == 'Active' ? Colors.green : Colors.grey,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }).toList(),
+                                            ),
+                                          );
+                                        }
+                                      },
                                     ),
                                   ),
                                 ),
+                                if (!isMobile) Expanded(flex: 1, child: Subscriberschart()),
                               ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.grey, width: 1.0),
-                          ),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 2.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _buildCountButton('Active', activeCount, Colors.black),
-                            _buildCountButton('Inactive', inactiveCount, Colors.black),
-                            _buildCountButton('Subscribed', subscribedCount, Colors.black),
-                            _buildCountButton('Unsubscribed', unsubscribedCount, Colors.black),
-                            _buildCountButton('Suspended', 123, Colors.black),
-                            _buildCountButton('Banned', 123, Colors.black),
-                            _buildCountButton('New User', 123, Colors.black),
-                            Spacer(),
-                            Container(
-                              width: 1,
-                              height: 30,
-                              margin: EdgeInsets.symmetric(horizontal: 12),
-                              color: Colors.grey,
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: ElevatedButton.icon(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.add,
-                                    color: Mymatethemes.textcolor,
-                                  ),
-                                  label: Text('Add New User',
-                                      style: TextStyle(color: Mymatethemes.textcolor)
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor:Mymatethemes.commonbuttonclr
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ElevatedButton(
-                            onPressed: selectedRows.isNotEmpty ? () {} : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: selectedRows.isNotEmpty
-                                  ? Mymatethemes.commonbuttonclr
-                                  : Colors.grey.shade300,
-                              foregroundColor: selectedRows.isNotEmpty
-                                  ? Colors.black
-                                  : Colors.black38,
-                            ),
-                            child: Text('Delete'
-                            ),
-                          ),
-                          SizedBox(width: 4),
-
-                          ElevatedButton(
-                            onPressed: selectedRows.isNotEmpty ? () {} : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: selectedRows.isNotEmpty
-                                  ? Mymatethemes.commonbuttonclr
-                                  :  Colors.grey.shade300,
-                              foregroundColor: selectedRows.isNotEmpty
-                                  ? Colors.black
-                                  : Colors.black38,
-
-                            ),
-                            child: Text('Add To'),
-                          ),
-                          SizedBox(width: 4),
-                          Container(
-                            height: 30,
-                            width: 145,
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: selectedRows.isNotEmpty
-                                  ? Mymatethemes.commonbuttonclr
-                                  : Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(20),
-
-                              // ),
-                            ),
-                            child: DropdownButton<String>(
-                              hint: Text(
-                                "Change Status",
-                                style: TextStyle(fontSize: 14, color: selectedRows.isNotEmpty ? Colors.black : Colors.grey),
-                              ),
-                              underline: SizedBox(),
-                              onChanged: selectedRows.isNotEmpty
-                                  ? (value) async {
-                                if (value != null) {
-                                  await _updateUserStatus(selectedRows, value);
-                                }
-                              }
-                                  : null,
-                              items: ["Basic", "Standard", "Premium", "Unsubscribed"]
-                                  .map(
-                                    (status) => DropdownMenuItem<String>(
-                                  value: status.toLowerCase(),
-                                  child: Text(status),
-                                ),
-                              )
-                                  .toList(),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 30),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                height: 750,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey, width: 1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: FutureBuilder<List<Map<String, dynamic>>>(
-                                  future: _fetchUserProfile(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
-                                      return Center(child: CircularProgressIndicator());
-                                    } else if (snapshot.hasError) {
-                                      return Center(child: Text('Error fetching data'));
-                                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                      return Center(child: Text('No users found'));
-                                    } else {
-                                      final users = snapshot.data!
-                                          .where((user) => user['full_name'].toLowerCase().contains(searchQuery))
-                                          .toList();
-                                      print(users);
-                                      return SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: DataTable(
-                                          headingRowHeight: 50,
-                                          dataRowHeight: 40,
-                                          columns: [
-                                            DataColumn(label: Text('Username')),
-                                            DataColumn(label: Text('Status')),
-                                            DataColumn(label: Text('Rank No')),
-                                            DataColumn(label: Text('Rank Type')),
-                                            DataColumn(label: Text('Active')),
-                                          ],
-                                          rows: users.map((user) {
-                                            final userTypeColor = _getStatusColor(user['user_type']);
-                                            final isSelected = selectedRows.contains(user['docid']);
-                                            return DataRow(
-                                              selected: isSelected,
-                                              onSelectChanged: (selected) {
-                                                setState(() {
-                                                  if (selected == true) {
-                                                    selectedRows.add(user['docid'] as String);
-                                                  } else {
-                                                    selectedRows.remove(user['docid']);
-                                                  }
-                                                });
-                                              },
-                                              cells: [
-                                                DataCell(
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              UserScreen(userId: user['id'] as String),
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: Text(user['full_name']),
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  Container(
-                                                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                                    decoration: BoxDecoration(
-                                                      color: userTypeColor.withOpacity(0.2),
-                                                      border: Border.all(color: userTypeColor, width: 0.5),
-                                                      borderRadius: BorderRadius.circular(20),
-                                                    ),
-                                                    child: Text(
-                                                      user['user_type'],
-                                                      style: TextStyle(
-                                                        color: userTypeColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                DataCell(Text(user['rank_no'])),
-                                                DataCell(Text(user['rank_type'])),
-                                                DataCell(
-                                                  Icon(
-                                                    user['active'] == 'Active' ? Icons.circle : Icons.circle_outlined,
-                                                    color: user['active'] == 'Active' ? Colors.green : Colors.grey,
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-
-
-
-                                      );
-
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(flex: 1, child: Subscriberschart()),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
@@ -467,13 +449,10 @@ class _ManageUsersState extends State<ManageUsers> {
   Widget _buildCountButton(String label, int count, Color color) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          backgroundColor:Mymatethemes.commonbuttonclr
+        backgroundColor: Mymatethemes.commonbuttonclr,
       ),
-
       onPressed: () {},
-      child: Text('$label ($count)', style: TextStyle(color: color
-      )),
-
+      child: Text('$label ($count)', style: TextStyle(color: color,fontSize: 14)),
     );
   }
 }

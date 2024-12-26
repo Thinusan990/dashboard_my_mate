@@ -96,6 +96,7 @@ class _UserScreenState extends State<UserScreen> {
         ),
       ),
     );
+
   }
   Widget _buildList(dynamic data) {
     if (data is List) {
@@ -112,9 +113,8 @@ class _UserScreenState extends State<UserScreen> {
         }).toList(),
       );
     }
-    return Text('N/A');  // Fallback if data is not a list
+    return Text('N/A');
   }
-
 
   Widget _buildRow(String title, dynamic value, {bool isBio = false}) {
     return Padding(
@@ -257,8 +257,8 @@ class _UserScreenState extends State<UserScreen> {
                         Divider(color: Colors.grey),
                         SizedBox(height: 2),
                         _buildManageButtonsRow(),
-                        SizedBox(height: 10), // Add some space
-                        _buildThreeContainers(), // New containers added here
+                        SizedBox(height: 10),
+                        _buildThreeContainers(),
                       ],
                     ),
                   ),
@@ -272,18 +272,32 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Widget _buildHeaderSection() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            _buildProfilePicture(),
-            SizedBox(width: 10),
-            _buildUserInfo(),
-          ],
-        ),
-        _buildActionButtons(),
-      ],
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _userDetails,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          final userData = snapshot.data!;
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  _buildProfilePicture(),
+                  SizedBox(width: 10),
+                  _buildUserInfo(userData),
+                ],
+              ),
+              _buildActionButtons(),
+            ],
+          );
+        } else {
+          return Center(child: Text('No data available'));
+        }
+      },
     );
   }
 
@@ -304,12 +318,17 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  Widget _buildUserInfo() {
+  Widget _buildUserInfo(Map<String, dynamic>? userData) {
+    final fullName = userData != null && userData.containsKey('full_name')
+        ? userData['full_name']
+        : "User’s Full Name";
+    final userId = widget.userId;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("User’s full Name", style: _textStyle(18, FontWeight.w500)),
-        Text("User ID",
+        Text(fullName, style: _textStyle(18, FontWeight.w500)),
+        Text("User ID: $userId",
             style: _textStyle(14, FontWeight.w400, Color(0xFF6F6F6F))),
       ],
     );
@@ -343,10 +362,10 @@ class _UserScreenState extends State<UserScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildTabButtons(),
-        Spacer(), // Push the rank buttons to the right
+        Spacer(),
         _buildRankButtons(),
         SizedBox(width: 8),
-        _buildEditButton(), // Rank buttons // Call to build the individual tab buttons
+        _buildEditButton(),
       ],
     );
   }
