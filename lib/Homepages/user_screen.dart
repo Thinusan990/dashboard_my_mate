@@ -98,23 +98,6 @@ class _UserScreenState extends State<UserScreen> {
     );
 
   }
-  Widget _buildList(dynamic data) {
-    if (data is List) {
-      if (data.isEmpty) {
-        return Text('No items available');
-      }
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: data.map((item) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(item.toString(), style: TextStyle(fontSize: 16)),
-          );
-        }).toList(),
-      );
-    }
-    return Text('N/A');
-  }
 
   Widget _buildRow(String title, dynamic value, {bool isBio = false}) {
     return Padding(

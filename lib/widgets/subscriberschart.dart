@@ -17,17 +17,17 @@ class _SubscriberschartState extends State<Subscriberschart> {
       if (userProfileData == null || userProfileData.isEmpty) {
         print('No user data found!');
         return {
-          'Basic': 0,
-          'Standard': 0,
-          'Premium': 0,
+          'basic': 0,
+          'standard': 0,
+          'premium': 0,
           'unsubscribed': 0,
         };
       }
 
       Map<String, int> userTypeCounts = {
-        'Basic': 0,
-        'Standard': 0,
-        'Premium': 0,
+        'basic': 0,
+        'standard': 0,
+        'premium': 0,
         'unsubscribed': 0,
       };
 
@@ -44,9 +44,9 @@ class _SubscriberschartState extends State<Subscriberschart> {
     } catch (e) {
       print('Error fetching user type counts: $e');
       return {
-        'Basic': 0,
-        'Standard': 0,
-        'Premium': 0,
+        'basic': 0,
+        'standard': 0,
+        'premium': 0,
         'unsubscribed': 0,
       };
     }
@@ -77,9 +77,9 @@ class _SubscriberschartState extends State<Subscriberschart> {
   }
 
   List<PieChartSectionData> _generateChartData(Map<String, int> userTypeCounts) {
-    final totalSubscribed = (userTypeCounts['Basic'] ?? 0) +
-        (userTypeCounts['Standard'] ?? 0) +
-        (userTypeCounts['Premium'] ?? 0);
+    final totalSubscribed = (userTypeCounts['basic'] ?? 0) +
+        (userTypeCounts['standard'] ?? 0) +
+        (userTypeCounts['premium'] ?? 0);
     final unsubscribed = userTypeCounts['unsubscribed'] ?? 0;
 
     return [
@@ -97,9 +97,9 @@ class _SubscriberschartState extends State<Subscriberschart> {
   }
 
   Widget buildChart(Map<String, int> userTypeCounts) {
-    final totalSubscribed = (userTypeCounts['Basic'] ?? 0) +
-        (userTypeCounts['Standard'] ?? 0) +
-        (userTypeCounts['Premium'] ?? 0);
+    final totalSubscribed = (userTypeCounts['basic'] ?? 0) +
+        (userTypeCounts['standard'] ?? 0) +
+        (userTypeCounts['premium'] ?? 0);
     final unsubscribed = userTypeCounts['unsubscribed'] ?? 0;
 
     return Scaffold(
@@ -168,21 +168,21 @@ class _SubscriberschartState extends State<Subscriberschart> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildStatBox(
-                      userTypeCounts['Basic']!, totalSubscribed, Mymatethemes.basic),
-                  _buildStatBox(userTypeCounts['Standard']!, totalSubscribed,
+                      userTypeCounts['basic']!, totalSubscribed, Mymatethemes.basic),
+                  _buildStatBox(userTypeCounts['standard']!, totalSubscribed,
                       Mymatethemes.standard),
                   _buildStatBox(
-                      userTypeCounts['Premium']!, totalSubscribed, Mymatethemes.premium),
+                      userTypeCounts['premium']!, totalSubscribed, Mymatethemes.premium),
                 ],
               ),
               SizedBox(height: 20),
 
               _buildUserCountRow(
-                  'Basic', userTypeCounts['Basic']!, Mymatethemes.basic),
+                  'Basic', userTypeCounts['basic']!, Mymatethemes.basic),
               _buildUserCountRow(
-                  'Standard', userTypeCounts['Standard']!, Mymatethemes.standard),
+                  'Standard', userTypeCounts['standard']!, Mymatethemes.standard),
               _buildUserCountRow(
-                  'Premium', userTypeCounts['Premium']!, Mymatethemes.premium),
+                  'Premium', userTypeCounts['premium']!, Mymatethemes.premium),
             ],
           ),
         ),

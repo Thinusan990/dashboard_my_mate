@@ -19,8 +19,7 @@ class _ManageUsersState extends State<ManageUsers> {
   int inactiveCount = 0;
   int subscribedCount = 0;
   int unsubscribedCount = 0;
-  Set<String> selectedRows = {};
-  final FirebaseService _firebaseService = FirebaseService();
+  List<String> selectedRows = [];
   Map<String, dynamic>? user;
 
   @override
@@ -29,26 +28,42 @@ class _ManageUsersState extends State<ManageUsers> {
     _fetchCounts();
   }
 
-  Future<void> _updateUserStatus(Set<String> userIds, String newStatus) async {
-    try {
-      for (String userId in userIds) {
-        await _firebaseService.updateUser(userId, {'user type': newStatus});
+  Future<void> _updateUserStatus(List<String> docIds, String newStatus) async {
+    for (String docId in docIds) {
+      try {
+        final response = await http.put(
+          Uri.parse(
+              'https://backend.graycorp.io:9000/mymate/api/v1/updateClient'),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({
+            "docId": docId,
+            "userInfo": {
+              "user_type": newStatus,
+            },
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Status updated successfully for $docId!")),
+          );
+          setState(() {
+            _fetchCounts();
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to update status for $docId.")),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: $e")),
+        );
       }
-      setState(() {
-        selectedRows.clear();
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("User status updated to $newStatus")),
-      );
-      _fetchCounts();
-    } catch (e) {
-      print("Error updating user status: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error updating user status")),
-      );
     }
   }
-
   Future<void> _fetchCounts() async {
     try {
       final users = await _fetchUserProfile();

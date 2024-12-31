@@ -1,5 +1,6 @@
 import 'package:dashboard_my_mate/Homepages/home_screen.dart';
 import 'package:dashboard_my_mate/Homepages/promos_offers_page.dart';
+import 'package:dashboard_my_mate/Test.dart';
 import 'package:dashboard_my_mate/client.dart';
 import 'package:dashboard_my_mate/dbconnection/clients.dart';
 import 'package:dashboard_my_mate/firebase_options.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  ManageUsers(),
+      home:  AstrologyPage(),
     );
   }
 }
