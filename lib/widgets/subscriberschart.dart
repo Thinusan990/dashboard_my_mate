@@ -1,6 +1,7 @@
+import 'package:dashboard_my_mate/APIs/Userprofile.dart';
+import 'package:dashboard_my_mate/MymateThemes.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Subscriberschart extends StatefulWidget {
   @override
@@ -8,17 +9,53 @@ class Subscriberschart extends StatefulWidget {
 }
 
 class _SubscriberschartState extends State<Subscriberschart> {
-  Map<String, int> userTypeCounts = {
-    'basic': 0,
-    'standard': 0,
-    'premium': 0,
-    'unsubscribed': 0,
-  };
+  Future<Map<String, int>> _getUserTypeCounts() async {
+    try {
+      final userProfileData = await fetchUserProfile();
+      print('Fetched user profile data: $userProfileData');
+
+      if (userProfileData == null || userProfileData.isEmpty) {
+        print('No user data found!');
+        return {
+          'basic': 0,
+          'standard': 0,
+          'premium': 0,
+          'unsubscribed': 0,
+        };
+      }
+
+      Map<String, int> userTypeCounts = {
+        'basic': 0,
+        'standard': 0,
+        'premium': 0,
+        'unsubscribed': 0,
+      };
+
+      for (var user in userProfileData) {
+        final userType = user['user_type'] ?? 'unsubscribed';
+        print('User type: $userType');
+        if (userTypeCounts.containsKey(userType)) {
+          userTypeCounts[userType] = userTypeCounts[userType]! + 1;
+        }
+      }
+
+      print('User type counts: $userTypeCounts');
+      return userTypeCounts;
+    } catch (e) {
+      print('Error fetching user type counts: $e');
+      return {
+        'basic': 0,
+        'standard': 0,
+        'premium': 0,
+        'unsubscribed': 0,
+      };
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('clients').snapshots(),
+    return FutureBuilder<Map<String, int>>(
+      future: _getUserTypeCounts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -28,36 +65,22 @@ class _SubscriberschartState extends State<Subscriberschart> {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
 
-        // Reset counts
-        Map<String, int> tempCounts = {
-          'basic': 0,
-          'standard': 0,
-          'premium': 0,
-          'unsubscribed': 0,
-        };
-
-        // Update counts based on data from Firestore
-        for (var doc in snapshot.data!.docs) {
-          final data = doc.data() as Map<String, dynamic>;
-          final userType = data['user type'] ?? 'unsubscribed';
-
-          if (tempCounts.containsKey(userType)) {
-            tempCounts[userType] = tempCounts[userType]! + 1;
-          }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No data available'));
         }
 
-        // Build chart with updated counts
-        return buildChart(tempCounts);
+        final userTypeCounts = snapshot.data!;
+
+        return buildChart(userTypeCounts);
       },
     );
   }
 
-  // Method to generate chart data
   List<PieChartSectionData> _generateChartData(Map<String, int> userTypeCounts) {
-    final totalSubscribed = userTypeCounts['basic']! +
-        userTypeCounts['standard']! +
-        userTypeCounts['premium']!;
-    final unsubscribed = userTypeCounts['unsubscribed']!;
+    final totalSubscribed = (userTypeCounts['basic'] ?? 0) +
+        (userTypeCounts['standard'] ?? 0) +
+        (userTypeCounts['premium'] ?? 0);
+    final unsubscribed = userTypeCounts['unsubscribed'] ?? 0;
 
     return [
       PieChartSectionData(
@@ -73,12 +96,11 @@ class _SubscriberschartState extends State<Subscriberschart> {
     ];
   }
 
-  // Method to build the UI for the chart
   Widget buildChart(Map<String, int> userTypeCounts) {
-    final totalSubscribed = userTypeCounts['basic']! +
-        userTypeCounts['standard']! +
-        userTypeCounts['premium']!;
-    final unsubscribed = userTypeCounts['unsubscribed']!;
+    final totalSubscribed = (userTypeCounts['basic'] ?? 0) +
+        (userTypeCounts['standard'] ?? 0) +
+        (userTypeCounts['premium'] ?? 0);
+    final unsubscribed = userTypeCounts['unsubscribed'] ?? 0;
 
     return Scaffold(
       body: Center(
@@ -97,7 +119,6 @@ class _SubscriberschartState extends State<Subscriberschart> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // First Row: Pie Chart
               Row(
                 children: [
                   SizedBox(
@@ -143,27 +164,25 @@ class _SubscriberschartState extends State<Subscriberschart> {
               ),
               SizedBox(height: 20),
 
-              // Percentages for Basic, Standard, and Premium
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildStatBox(
-                      userTypeCounts['basic']!, totalSubscribed, Colors.blue),
+                      userTypeCounts['basic']!, totalSubscribed, Mymatethemes.basic),
                   _buildStatBox(userTypeCounts['standard']!, totalSubscribed,
-                      Colors.green),
+                      Mymatethemes.standard),
                   _buildStatBox(
-                      userTypeCounts['premium']!, totalSubscribed, Colors.red),
+                      userTypeCounts['premium']!, totalSubscribed, Mymatethemes.premium),
                 ],
               ),
               SizedBox(height: 20),
 
-              // Counts for each category
               _buildUserCountRow(
-                  'Basic', userTypeCounts['basic']!, Colors.blue),
+                  'Basic', userTypeCounts['basic']!, Mymatethemes.basic),
               _buildUserCountRow(
-                  'Standard', userTypeCounts['standard']!, Colors.green),
+                  'Standard', userTypeCounts['standard']!, Mymatethemes.standard),
               _buildUserCountRow(
-                  'Premium', userTypeCounts['premium']!, Colors.red),
+                  'Premium', userTypeCounts['premium']!, Mymatethemes.premium),
             ],
           ),
         ),
@@ -171,7 +190,6 @@ class _SubscriberschartState extends State<Subscriberschart> {
     );
   }
 
-  // Helper function for stat boxes (Basic, Standard, Premium)
   Widget _buildStatBox(int count, int total, Color color) {
     final percentage = total > 0 ? (count / total) * 100 : 0;
     return Container(
@@ -195,25 +213,23 @@ class _SubscriberschartState extends State<Subscriberschart> {
     );
   }
 
-  // Helper function for stat text (Total Subscribers and Total Users)
   Widget _buildStatText(int count, String title) {
     return Column(
       children: [
-        Text(
-          title,
-          style: TextStyle(fontSize: 14, color: Colors.black87),
-        ),
-        SizedBox(height: 4),
         Text(
           '$count',
           style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
+        SizedBox(height: 4),
+        Text(
+          title,
+          style: TextStyle(fontSize: 14, color: Colors.black87),
+        ),
       ],
     );
   }
 
-  // Helper function for user count rows (Basic, Standard, Premium counts)
   Widget _buildUserCountRow(String title, int count, Color color) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),

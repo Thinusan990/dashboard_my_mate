@@ -1,6 +1,10 @@
 import 'package:dashboard_my_mate/Homepages/home_screen.dart';
+import 'package:dashboard_my_mate/Homepages/promos_offers_page.dart';
+import 'package:dashboard_my_mate/Test.dart';
 import 'package:dashboard_my_mate/client.dart';
+import 'package:dashboard_my_mate/dbconnection/clients.dart';
 import 'package:dashboard_my_mate/firebase_options.dart';
+import 'package:dashboard_my_mate/user_chart/User_chart.dart';
 import 'package:dashboard_my_mate/widgets/multiplepichart.dart';
 import 'package:dashboard_my_mate/widgets/package_boost.dart';
 import 'package:dashboard_my_mate/widgets/subscriberschart.dart';
@@ -9,7 +13,12 @@ import 'package:dashboard_my_mate/widgets/userstatics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'Homepages/UserbasedPromodetailpage.dart';
+import 'Homepages/timebasedPromoDetailPage.dart';
 import 'Homepages/manage_user.dart';
+import 'Homepages/tokens_screen.dart';
+import 'Homepages/unlimitedUserbasedPromodetails.dart';
+import 'Homepages/unlimitedtimebasedPromodetails.dart';
 import 'Homepages/user_screen.dart';
 import 'widgets/api_users.dart';
 
@@ -49,7 +58,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  UserScreen(),
+      home:  AstrologyPage(),
     );
   }
 }
