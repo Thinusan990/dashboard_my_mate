@@ -1,5 +1,9 @@
+import 'package:dashboard_my_mate/Homepages/home_screen.dart';
 import 'package:dashboard_my_mate/MymateThemes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../Homepages/manage_user.dart';
 
 class SidebarLayout extends StatefulWidget {
   @override
@@ -13,123 +17,225 @@ class _SidebarLayoutState extends State<SidebarLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      color: Mymatethemes.sidemenuColor ,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return LayoutBuilder(
+        builder: (context, constraints) {
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
+        return
+          Expanded(
+            child: Container(
+              width: width * 0.1,
+              height: height*1,
+              color: Mymatethemes.sidemenuColor,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(width * 0.01),
+                    child: Text(
+                      'My Mate',
+                      style: TextStyle(
+                        color: Mymatethemes.editabletextclr,
+                        fontSize: width * 0.015,
+                        fontWeight: FontWeight.w600,
+                          letterSpacing: 0.8
+                      ),
+                    ),
+                  ),
 
-          Padding(
-            padding: const EdgeInsets.all(14.0),
-            child: Text(
-              'My Mate',
-              style: TextStyle(
-                color: Mymatethemes.sidemenutextcolor,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+                  // SEARCH BAR
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal:width*0.01,vertical: height*0.001),
+                    child:
+                        Container(
+                          height:height*0.045 ,
+                          width: width*0.17,
+                         decoration: BoxDecoration(
+                          border: Border.all(color: Mymatethemes.sidemenutextcolor.withOpacity(0.1)),
+                          borderRadius: BorderRadius.circular(width*0.003),
+                  ),
+                          child: TextField(
+                            controller: searchController,
+                            cursorColor: Mymatethemes.textcolor,
+                            style: TextStyle(
+                              fontSize: width*0.011,
+                              color: Mymatethemes.textcolor,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Search",
+                              hintStyle: TextStyle(color:Mymatethemes.sidemenutextcolor.withOpacity(0.3),fontSize: width*0.011),
+                              prefixIcon: Padding(
+                                padding:  EdgeInsets.symmetric(horizontal:width*0.01,vertical: height*0.005),
+                                child:Icon(Icons.search,size: height*0.03, color: Mymatethemes.sidemenutextcolor.withOpacity(0.4)) ,
+                                //       prefixIcon: Icon(Icons.search, color: Mymatethemes.sidemenutextcolor),
+
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding:  EdgeInsets.symmetric(vertical:height*0.017),
+                              border: InputBorder.none
+                              // border:OutlineInputBorder(
+                              //   borderSide: BorderSide(color:Colors.red),
+                              //
+                              //   borderRadius: BorderRadius.circular(width*0.005),
+                              //
+                              // ),
+
+                            ),
+                            onChanged: (value) {
+                              // Perform search logic
+                              print("Searching for: $value");
+                            },
+                          ),
+
+                        ),
+                  ),
+                  SizedBox(height: height * 0.01),
+
+                  // SIDEBAR ITEMS
+                  Expanded( // ✅ Ensures the list takes the remaining space
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSidebarItem(Icons.home_outlined, "Home", () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                          }),
+                          _buildManageUserTile(),
+                          _buildSidebarItem(Icons.local_fire_department_outlined, "Tokens", () {}),
+                          _buildSidebarItem(Icons.trending_up_sharp, "Statistics", () {}),
+                          _buildSidebarItem(Icons.headset_mic, "Support & Report", () {}),
+                          _buildSidebarItem(Icons.ad_units, "Third Party Adds", () {}),
+                          _buildSidebarItem(Icons.local_offer_outlined, "Promo & Offers", () {}),
+                          _buildSidebarItem(Icons.bolt, "Boosts", () {}),
+
+                           SizedBox(height: height*0.16,),
+                          _buildSidebarItem(Icons.check_box_outline_blank, "Admin Name", () {}),
+                          _buildSidebarItem(Icons.settings_outlined, "Settings", () {}),
+                          _buildSidebarItem(Icons.logout, "Log out", () {}),
+
+
+
+
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: TextField(
-              controller: searchController,
-              style: TextStyle(color: Mymatethemes.sidemenutextcolor),
-              decoration: InputDecoration(
-                hintText: "Search",
-                hintStyle: TextStyle(color:Mymatethemes.sidemenutextcolor),
-                prefixIcon: Icon(Icons.search, color: Mymatethemes.sidemenutextcolor),
-                filled: true,
-                fillColor: Mymatethemes.backgroundColor,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: Colors.grey, // Outline border color
-                    width: 0.5),
-                ),
-              ),
-              onChanged: (value) {
-                // Perform search logic
-                print("Searching for: $value");
-              },
-            ),
-          ),
-
-          _buildSidebarItem(Icons.home, "Home", 16, () {}),
-          _buildManageUserTile(),
-          _buildSidebarItem(
-              Icons.local_fire_department_outlined, "Tokens", 16, () {}),
-          _buildSidebarItem(Icons.trending_up_sharp, "Statistics", 16, () {}),
-          _buildSidebarItem(Icons.headset_mic, "Support & Report", 16, () {}),
-          _buildSidebarItem(Icons.ad_units, "Third Party Adds", 16, () {}),
-          _buildSidebarItem(
-              Icons.local_offer_outlined, "Promo & Offers", 16, () {}),
-          _buildSidebarItem(Icons.bolt, "Boosts", 16, () {}),
-        ],
-      ),
+          );
+      }
     );
   }
 
-  Widget _buildSidebarItem(IconData icon, String title, double fontSize,
+
+  Widget _buildSidebarItem(IconData icon, String title,
       VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon, color: Mymatethemes.sidemenutextcolor),
-      title: Text(
-        title,
-        style: TextStyle(color: Mymatethemes.sidemenutextcolor,
-             fontSize: fontSize),
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 0.0), // ✅ Reduces space
+      child: ListTile(
+        leading: Icon(icon,size: height*0.03, color: Mymatethemes.sidemenutextcolor.withOpacity(0.5)),
+        title: Text(
+          title,
+          style: TextStyle(color: Mymatethemes.sidemenutextcolor,fontWeight: FontWeight.w500,
+               fontSize: width*0.01),
+        ),
+        onTap: onTap,
+        dense: true, // ✅ Makes ListTile more compact
+
       ),
-      onTap: onTap,
     );
   }
 
   Widget _buildManageUserTile() {
-    return ExpansionTile(
-      title: Row(
-        children: [
-          Icon(Icons.person, color: Mymatethemes.sidemenutextcolor),
-          SizedBox(width: 8),
-          Text('Users', style: TextStyle(color: Mymatethemes.sidemenutextcolor)),
-        ],
-      ),
-      trailing: Icon(
-        isManageUserExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-        color: Mymatethemes.sidemenutextcolor,
-      ),
-      backgroundColor: Mymatethemes.sidemenuColor,
-      children: [
-        _buildSubSidebarItem("New User", () {}),
-        _buildSubSidebarItem("Active User", () {}),
-        _buildSubSidebarItem("Inactive User", () {}),
-        _buildCategoryDropdown(),
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 0.0), // ✅ Reduces space
+      child: ExpansionTile(
+        title:
 
-      ],
-      onExpansionChanged: (bool expanded) {
-        setState(() {
-          isManageUserExpanded = expanded;
-        });
-      },
+        GestureDetector(
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ManageUsers()));
+          },
+
+          child: Row(
+            children: [
+
+              Icon(Icons.person_outline_rounded,size:height*0.03, color: Mymatethemes.sidemenutextcolor.withOpacity(0.3)),
+              SizedBox(width: width*0.01),
+              Text('Users', style: TextStyle(fontSize:width*0.01,color: Mymatethemes.sidemenutextcolor)),
+            ],
+          ),
+        ),
+        trailing: Icon(
+          isManageUserExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+          color: Mymatethemes.sidemenutextcolor,
+        ),
+        backgroundColor: Mymatethemes.sidemenuColor,
+        children: [
+          _buildSubSidebarItem("New User",123, () {}),
+          _buildSubSidebarItem("Active User",13, () {}),
+          _buildSubSidebarItem("Inactive User", 23,() {}),
+          _buildCategoryDropdown(),
+
+        ],
+        onExpansionChanged: (bool expanded) {
+          setState(() {
+            isManageUserExpanded = expanded;
+          });
+        },
+        dense: true, // ✅ Makes ListTile more compact
+
+      ),
     );
   }
 
-  Widget _buildSubSidebarItem(String title, Function onPressed) {
-    return ListTile(
-      leading: SizedBox(width: 32),
-      title: Text(
-        title,
-        style: TextStyle(color: Mymatethemes.textcolor),
+  Widget _buildSubSidebarItem(String title,int count, Function onPressed) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 0.0), // ✅ Reduces space
+      child: ListTile(
+        leading: SizedBox(width: width*0.03),
+        title:Row(
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontSize:width*0.01,color: Mymatethemes.sidemenutextcolor.withOpacity(0.8),fontWeight: FontWeight.normal),
+            ),
+            SizedBox(width: width*0.03),
+
+            Text(
+              '$count' ,
+              style: TextStyle(fontSize:width*0.011,color: Mymatethemes.sidemenutextcolor.withOpacity(0.8),fontWeight: FontWeight.normal),
+            ),
+          ],
+        ),
+
+        dense: true, // ✅ Makes ListTile more compact
+
+        onTap: () => onPressed(),
       ),
-      onTap: () => onPressed(),
     );
   }
 
   Widget _buildCategoryDropdown() {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return ListTile(
-      leading: SizedBox(width: 30),
+      leading: SizedBox(width: width*0.028),
         title: DropdownButton<String>(
         value: selectedCategory,
-        dropdownColor: Color(0xFFF9FAFB),
+        dropdownColor: Colors.white,
         style: TextStyle(color: Mymatethemes.textcolor),
         underline: Container(),
         // Remove underline
@@ -137,7 +243,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
           DropdownMenuItem<String>(
             value: "Select Category",
             child: Text(
-                " Category", style: TextStyle(color: Mymatethemes.textcolor)),
+                " Category", style: TextStyle(fontSize: width*0.011,color:Mymatethemes.sidemenutextcolor.withOpacity(0.8),fontWeight: FontWeight.normal)),
           ),
           DropdownMenuItem<String>(
             value: "Category 1",
@@ -157,7 +263,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
             child: Row(
               children: [
                 Icon(Icons.add, color: Colors.grey),
-                SizedBox(width: 8),
+                SizedBox(width: width*0.01),
                 Text("Add Category", style: TextStyle(color:Mymatethemes.textcolor)),
               ],
             ),
@@ -173,7 +279,7 @@ class _SidebarLayoutState extends State<SidebarLayout> {
           }
           print("Selected Category: $value");
         },
-        icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+        icon: Icon(Icons.arrow_drop_down, color: Mymatethemes.textcolor),
       ),
     );
   }
