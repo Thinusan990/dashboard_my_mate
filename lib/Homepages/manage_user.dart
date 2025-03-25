@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:dashboard_my_mate/Homepages/user_screen.dart';
+import 'package:dashboard_my_mate/provider/user_provider.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../MymateThemes.dart';
 import '../dbconnection/firebase.dart';
+import '../models/user_model.dart';
 import '../widgets/subscriberschart.dart';
 
 class ManageUsers extends StatefulWidget {
@@ -21,6 +24,7 @@ class _ManageUsersState extends State<ManageUsers> {
   int unsubscribedCount = 0;
   List<String> selectedRows = [];
   Map<String, dynamic>? user;
+  List<Map<String, dynamic>> usersList = [];
 
   @override
   void initState() {
@@ -28,42 +32,42 @@ class _ManageUsersState extends State<ManageUsers> {
     _fetchCounts();
   }
 
-  Future<void> _updateUserStatus(List<String> docIds, String newStatus) async {
-    for (String docId in docIds) {
-      try {
-        final response = await http.put(
-          Uri.parse(
-              'https://backend.graycorp.io:9000/mymate/api/v1/updateClient'),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: jsonEncode({
-            "docId": docId,
-            "userInfo": {
-              "user_type": newStatus,
+    Future<void> _updateUserStatus(List<String> docIds, String newStatus) async {
+      for (String docId in docIds) {
+        try {
+          final response = await http.put(
+            Uri.parse('https://backend.graycorp.io:9000/mymate/api/v1/updateClient'),
+            headers: {
+              "Content-Type": "application/json",
             },
-          }),
-        );
-
-        if (response.statusCode == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Status updated successfully for $docId!")),
+            body: jsonEncode({
+              "docId": docId,
+              "userInfo": {
+                "user_type": newStatus,
+              },
+            }),
           );
-          setState(() {
-            _fetchCounts();
-          });
-        } else {
+
+          if (response.statusCode == 200) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Status updated successfully for $docId!")),
+            );
+            setState(() {
+              _fetchCounts();
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Failed to update status for $docId.")),
+            );
+          }
+        } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Failed to update status for $docId.")),
+            SnackBar(content: Text("Error: $e")),
           );
         }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: $e")),
-        );
       }
     }
-  }
+
   Future<void> _fetchCounts() async {
     try {
       final users = await _fetchUserProfile();
@@ -73,7 +77,6 @@ class _ManageUsersState extends State<ManageUsers> {
       int unsubscribed = 0;
 
       for (var user in users) {
-        // Count Active and Inactive users
         if (user['active'] == 'Active') {
           active++;
         } else if (user['active'] == 'Inactive') {
@@ -126,6 +129,15 @@ class _ManageUsersState extends State<ManageUsers> {
     }
   }
 
+  Color _getAddButtonColor(UserRole? role) {
+    if (role == UserRole.admin) {
+      return Colors.blue;
+    } else if (role == UserRole.manager) {
+      return Colors.black;
+    }
+    return Colors.grey[300]!;
+  }
+
   Color _getStatusColor(String user_type) {
     switch (user_type.toLowerCase()) {
       case 'premium':
@@ -141,6 +153,11 @@ class _ManageUsersState extends State<ManageUsers> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final UserRole? role = userProvider.user?.role;
+    bool isAdmin = role == UserRole.admin;
+    bool isManager = role == UserRole.manager;
+
     return Scaffold(
       body: SafeArea(
         child: LayoutBuilder(
@@ -195,6 +212,7 @@ class _ManageUsersState extends State<ManageUsers> {
                                           backgroundColor: Mymatethemes.commonbuttonclr,
                                         ),
                                       ),
+                                      SizedBox(width: 8),
                                       ElevatedButton.icon(
                                         onPressed: () {},
                                         icon: Icon(
@@ -214,7 +232,8 @@ class _ManageUsersState extends State<ManageUsers> {
                                     height: 30,
                                     margin: EdgeInsets.symmetric(horizontal: 8),
                                     color: Colors.grey,
-                                  ),                                  SizedBox(
+                                  ),
+                                  SizedBox(
                                     width: 200,
                                     child: TextField(
                                       controller: searchController,
@@ -230,6 +249,39 @@ class _ManageUsersState extends State<ManageUsers> {
                                           borderRadius: BorderRadius.circular(16.0),
                                         ),
                                         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 1,
+                                    height: 30,
+                                    margin: EdgeInsets.symmetric(horizontal: 8),
+                                    color: Colors.grey,
+                                  ),
+                                  MouseRegion(
+                                    cursor: isAdmin
+                                        ? SystemMouseCursors.click
+                                        : SystemMouseCursors.forbidden,
+                                    child: ElevatedButton.icon(
+                                      onPressed: isAdmin
+                                          ? () {
+                                        // Add your new user logic here
+                                      }
+                                          : null,
+                                      icon: Icon(
+                                        Icons.add,
+                                        color: isAdmin ? Colors.white : Colors.grey,
+                                      ),
+                                      label: Text(
+                                        'Add New User',
+                                        style: TextStyle(
+                                          color: isAdmin ? Colors.white : Colors.grey,
+                                        ),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: _getAddButtonColor(role),
+                                        disabledBackgroundColor: isManager ? Colors.red : Colors.grey[300],
+                                        disabledForegroundColor: Colors.grey,
                                       ),
                                     ),
                                   ),
@@ -254,24 +306,12 @@ class _ManageUsersState extends State<ManageUsers> {
                                 if (!isMobile) _buildCountButton('Suspended', 123, Colors.black),
                                 if (!isMobile) _buildCountButton('Banned', 123, Colors.black),
                                 if (!isMobile) _buildCountButton('New User', 123, Colors.black),
-
-
-                                // Spacer(),
                                 Container(
                                   width: 1,
                                   height: 30,
                                   margin: EdgeInsets.symmetric(horizontal: 0),
                                   color: Colors.grey,
                                 ),
-                                if (!isMobile)
-                                  ElevatedButton.icon(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.add, color: Mymatethemes.textcolor),
-                                    label: Text('Add New User', style: TextStyle(color: Mymatethemes.textcolor)),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Mymatethemes.commonbuttonclr,
-                                    ),
-                                  ),
                               ],
                             ),
                           ),
@@ -314,17 +354,20 @@ class _ManageUsersState extends State<ManageUsers> {
                                       ? Mymatethemes.commonbuttonclr
                                       : Colors.grey.shade300,
                                   borderRadius: BorderRadius.circular(20),
-                                    border: selectedRows.isNotEmpty
-                                        ? Border.all(
-                                      color: Colors.grey.shade300,
-                                      width: 1.0,
-                                    )
-                                        : null,
+                                  border: selectedRows.isNotEmpty
+                                      ? Border.all(
+                                    color: Colors.grey.shade300,
+                                    width: 1.0,
+                                  )
+                                      : null,
                                 ),
                                 child: DropdownButton<String>(
                                   hint: Text(
                                     "Change Status",
-                                    style: TextStyle(fontSize: 14, color: selectedRows.isNotEmpty ? Colors.black : Colors.grey),
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: selectedRows.isNotEmpty ? Colors.black : Colors.grey
+                                    ),
                                   ),
                                   underline: SizedBox(),
                                   onChanged: selectedRows.isNotEmpty
