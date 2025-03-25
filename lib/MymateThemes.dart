@@ -1,6 +1,8 @@
 
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class Mymatethemes{
   static const Color backgroundColor = Color(0xFFFEFEFA);
   static const Color sidemenuColor = Color (0xFFF9FAFB);
@@ -19,4 +21,22 @@ static  const commonbuttonclr = Color(0xFFFFFFFF);
   static const double normalFontSize = 16 ;
   static const double subHeadFontSize = 18;
   static const double titlesize = 30;
+
+}
+
+class CommonButtonStyle {
+  static ButtonStyle commonButtonStyle() {
+    return
+      ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.white),
+        backgroundColor: MaterialStateProperty.all(Mymatethemes.add_editbtn),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)
+            )),
+        padding: MaterialStateProperty.all(
+          EdgeInsets.symmetric(vertical: 0.0, horizontal: 14.0), // Adjust values as needed
+        ),
+      );
+  }
 }
