@@ -32,7 +32,7 @@ class _SubscriberschartState extends State<Subscriberschart> {
       };
 
       for (var user in userProfileData) {
-        final userType = user['user_type'] ?? 'unsubscribed';
+        final userType = (user['user_type'] ?? 'unsubscribed').toString().toLowerCase();
         print('User type: $userType');
         if (userTypeCounts.containsKey(userType)) {
           userTypeCounts[userType] = userTypeCounts[userType]! + 1;
@@ -87,11 +87,13 @@ class _SubscriberschartState extends State<Subscriberschart> {
         color: Colors.grey[600]!,
         value: totalSubscribed.toDouble(),
         radius: 10,
+        title: '', // Remove text from slice
       ),
       PieChartSectionData(
         color: Colors.grey[400]!,
         value: unsubscribed.toDouble(),
         radius: 10,
+        title: '', // Remove text from slice
       ),
     ];
   }
@@ -104,100 +106,90 @@ class _SubscriberschartState extends State<Subscriberschart> {
 
     return LayoutBuilder(
         builder: (context, constraints) {
-          bool isMobile = constraints.maxWidth < 600;
           double width = MediaQuery.of(context).size.width;
           double height = MediaQuery.of(context).size.height;
-        return Scaffold(
-          body: Center(
-            child: Container(
-              width: width*0.22,
-              height: height*0.8,
-              padding: EdgeInsets.all(width*0.01),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(width*0.01),
-                border: Border.all(
-                  color: Mymatethemes.add_editbtn.withOpacity(0.2),
-                  width: 1.5,
+          return Scaffold(
+            body: Center(
+              child: Container(
+                width: width * 0.22,
+                height: height * 0.8,
+                padding: EdgeInsets.all(width * 0.01),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(width * 0.01),
+                  border: Border.all(
+                    color: Mymatethemes.add_editbtn.withOpacity(0.2),
+                    width: 1.5,
+                  ),
                 ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: width*0.1,
-                        height: height*0.1,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            PieChart(
-                              PieChartData(
-                                sections: _generateChartData(userTypeCounts),
-                                centerSpaceRadius: 35,
-                                sectionsSpace: 0,
-                                borderData: FlBorderData(show: false),
-                              ),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${((totalSubscribed / (totalSubscribed + unsubscribed)) * 100).toStringAsFixed(0)}%',
-                                  style: TextStyle(
-                                    fontSize: width*0.014,
-                                    fontWeight: FontWeight.w600,
-                                    color: Mymatethemes.textcolor,
-                                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: width * 0.1,
+                          height: height * 0.1,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              PieChart(
+                                PieChartData(
+                                  sections: _generateChartData(userTypeCounts),
+                                  centerSpaceRadius: 35,
+                                  sectionsSpace: 0,
+                                  borderData: FlBorderData(show: false),
                                 ),
-                              ],
-                            ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${((totalSubscribed / (totalSubscribed + unsubscribed)) * 100).toStringAsFixed(0)}%',
+                                    style: TextStyle(
+                                      fontSize: width * 0.014,
+                                      fontWeight: FontWeight.w600,
+                                      color: Mymatethemes.textcolor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildStatText(totalSubscribed, 'Subscribers'),
+                            SizedBox(height: height * 0.05),
+                            _buildStatText(totalSubscribed + unsubscribed, 'Total'),
                           ],
                         ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildStatText(totalSubscribed, 'Subscribers'),
-                          SizedBox(height: height*0.05),
-                          _buildStatText(
-                              totalSubscribed + unsubscribed, 'Total'),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: height*0.05),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildStatBox(
-                          userTypeCounts['basic']!, totalSubscribed, Mymatethemes.basic),
-                      _buildStatBox(userTypeCounts['standard']!, totalSubscribed,
-                          Mymatethemes.standard),
-                      _buildStatBox(
-                          userTypeCounts['premium']!, totalSubscribed, Mymatethemes.premium),
-                    ],
-                  ),
-                  SizedBox(height: height*0.02),
-                   Row(
-                     children: [
-                       _buildUserBasicCountRow(
-                           'Basic', userTypeCounts['basic']!, Mymatethemes.basic),
-                     ],
-                   ),
-
-                  _buildUserCountRow(
-                      'Standard', userTypeCounts['standard']!, Mymatethemes.standard),
-                  _buildUserCountRow(
-                      'Premium', userTypeCounts['premium']!, Mymatethemes.premium),
-                ],
+                      ],
+                    ),
+                    SizedBox(height: height * 0.05),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildStatBox(userTypeCounts['basic']!, totalSubscribed, Mymatethemes.basic),
+                        _buildStatBox(userTypeCounts['standard']!, totalSubscribed, Mymatethemes.standard),
+                        _buildStatBox(userTypeCounts['premium']!, totalSubscribed, Mymatethemes.premium),
+                      ],
+                    ),
+                    SizedBox(height: height * 0.02),
+                    Row(
+                      children: [
+                        _buildUserBasicCountRow('Basic', userTypeCounts['basic']!, Mymatethemes.basic),
+                      ],
+                    ),
+                    _buildUserCountRow('Standard', userTypeCounts['standard']!, Mymatethemes.standard),
+                    _buildUserCountRow('Premium', userTypeCounts['premium']!, Mymatethemes.premium),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }
+          );
+        }
     );
   }
 
@@ -207,12 +199,10 @@ class _SubscriberschartState extends State<Subscriberschart> {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      width: width*0.06,
-      height: height*0.062,
+      width: width * 0.06,
+      height: height * 0.062,
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
-       // borderRadius: BorderRadius.circular(8),
-       // border: Border.all(color: color, width: 1.5),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -220,7 +210,7 @@ class _SubscriberschartState extends State<Subscriberschart> {
           Text(
             '${percentage.toStringAsFixed(1)}%',
             style: TextStyle(
-                fontSize: width*0.01, fontWeight: FontWeight.bold, color: color),
+                fontSize: width * 0.01, fontWeight: FontWeight.bold, color: color),
           ),
         ],
       ),
@@ -229,18 +219,21 @@ class _SubscriberschartState extends State<Subscriberschart> {
 
   Widget _buildStatText(int count, String title) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     return Column(
       children: [
         Text(
           '$count',
           style: TextStyle(
-              fontSize: width*0.012, fontWeight: FontWeight.w600, color:Mymatethemes.sidemenutextcolor),
+              fontSize: width * 0.012, fontWeight: FontWeight.w600, color: Mymatethemes.sidemenutextcolor),
         ),
         Text(
           title,
-          style: TextStyle(fontSize:width*0.011, color: Mymatethemes.sidemenutextcolor,fontWeight: FontWeight.normal,letterSpacing: 0.8),
+          style: TextStyle(
+              fontSize: width * 0.011,
+              color: Mymatethemes.sidemenutextcolor,
+              fontWeight: FontWeight.normal,
+              letterSpacing: 0.8),
         ),
       ],
     );
@@ -251,50 +244,52 @@ class _SubscriberschartState extends State<Subscriberschart> {
     double height = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding:  EdgeInsets.symmetric(vertical:height*0.01),
+      padding: EdgeInsets.symmetric(vertical: height * 0.01),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(width: width*0.03),
-
+          SizedBox(width: width * 0.03),
           Text(
             title,
             style: TextStyle(
-                fontSize: width*0.011, fontWeight: FontWeight.w100, color: color),
+                fontSize: width * 0.011,
+                fontWeight: FontWeight.w100,
+                color: color),
           ),
-          SizedBox(width: width*0.05),
+          SizedBox(width: width * 0.05),
           Text(
             '$count',
-            style: TextStyle(fontSize:  width*0.012, color: Colors.black87),
+            style: TextStyle(fontSize: width * 0.012, color: Colors.black87),
           ),
         ],
       ),
     );
   }
+
   Widget _buildUserBasicCountRow(String title, int count, Color color) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding:  EdgeInsets.symmetric(vertical:height*0.01),
+      padding: EdgeInsets.symmetric(vertical: height * 0.01),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(width: width*0.03),
-
+          SizedBox(width: width * 0.03),
           Text(
             title,
             style: TextStyle(
-                fontSize: width*0.011, fontWeight: FontWeight.w100, color: color),
+                fontSize: width * 0.011,
+                fontWeight: FontWeight.w100,
+                color: color),
           ),
-          SizedBox(width: width*0.068),
+          SizedBox(width: width * 0.068),
           Text(
             '$count',
-            style: TextStyle(fontSize:  width*0.012, color: Colors.black87),
+            style: TextStyle(fontSize: width * 0.012, color: Colors.black87),
           ),
         ],
       ),
     );
   }
-
 }

@@ -31,7 +31,7 @@ Future<List<Map<String, dynamic>>> fetchUserProfile() async {
 
 
 Future<Map<String, dynamic>> fetchUserById(String docId) async {
-  final String apiUrl = 'https://backend.graycorp.io:9000/mymate/api/v1/getClientDataByDocId';
+  final String apiUrl = 'http://192.168.1.6:9000/mymate/api/v1/getClientDataByDocId';
 
   try {
     if (docId.isEmpty) {
@@ -39,6 +39,7 @@ Future<Map<String, dynamic>> fetchUserById(String docId) async {
       return {};
     }
     final Uri url = Uri.parse('$apiUrl?docId=$docId');
+
 
     final response = await http.get(url);
 
@@ -50,7 +51,7 @@ Future<Map<String, dynamic>> fetchUserById(String docId) async {
       final contactInfo = data['contactInfo'] ?? {};
       final astrology = data['astrology'] ?? {};
       final countryCode = contactInfo['mobile_country_code'] ?? '';
-      final mobileNumber = contactInfo['mobile'] ?? '';
+        final mobileNumber = contactInfo['mobile'] ?? '';
       final address = contactInfo['address'] ?? {};
       final houseNumber = address['house_number'] ?? '';
       final home = address['home'] ?? '';
@@ -60,9 +61,20 @@ Future<Map<String, dynamic>> fetchUserById(String docId) async {
       final lifestyle = data['lifestyle'] ?? {};
       final profileImages = data['profileImages'] ?? {};
 
-      final imageGallery =
-          profileImages['images']?['gallery_image_urls'] ?? [];
-      final userImages = (imageGallery as List).take(3).toList();
+      // final imageGallery =
+      //     profileImages['profile_pic_url'] ?? [];
+      // final userImages = (imageGallery as List).take(3).toList();
+
+      final imageGalleryRaw = profileImages['gallery_image_urls'];
+      List<dynamic>  imageGallery;
+      if(imageGalleryRaw is String) {
+        imageGallery = [imageGalleryRaw];
+      } else if (imageGalleryRaw is List) {
+        imageGallery = imageGalleryRaw;
+      }else {
+        imageGallery= [];
+      }
+      final userImages = imageGallery.take(3).toList();
 
       final formattedContact = countryCode.isNotEmpty && mobileNumber.isNotEmpty
           ? '$countryCode$mobileNumber'
@@ -88,15 +100,16 @@ Future<Map<String, dynamic>> fetchUserById(String docId) async {
         'religion': personalDetails['religion'] ?? 'N/A',
         'caste': personalDetails['caste'] ?? 'N/A',
         'mothers_name': data['mothers_name'] ?? 'N/A',
-        'contact': formattedContact,
+        'contact': mobileNumber,
         'no_of_siblings': data['no_of_siblings'] ?? 0,
         'hobbies': lifestyle['hobbies'] ?? 'N/A',
         'favorites': lifestyle['personal_interest'] ?? 'N/A',
-        'alcohol': lifestyle['habits'] ?? 'N/A',
+        'alcohol': lifestyle['alcoholIntake'] ?? 'N/A',
         'sports': data['sports'] ?? 'N/A',
-        'cooking': data['cooking'] ?? 'N/A',
+        'cooking': lifestyle['cooking'] ?? 'N/A',
         'bio': personalDetails['bio'] ?? 'N/A',
         'images': userImages,
+        'expectation' :lifestyle['expectations'] ?? 'N/A',
 
       };
     } else {

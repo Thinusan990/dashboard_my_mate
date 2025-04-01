@@ -7,7 +7,7 @@ import '../user_chart/User_chart.dart';
 import '../users_details/user_package.dart';
 
 class UserScreen extends StatefulWidget {
-  final String  userId;
+  final String userId;
 
     const UserScreen({Key? key, required this.userId}) : super(key: key);
 
@@ -34,6 +34,8 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Widget aboutmeWidget(Map<String, dynamic> userData) {
+    print("MoreMore about me details: $userData");
+
     return Container(
       width: 650,
       height: 750,
@@ -66,6 +68,8 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Widget moreaboutmeWidget(Map<String, dynamic> userData) {
+    print("More about me details: $userData");
+
     return Container(
       width: 650,
       height: 750,
@@ -146,6 +150,8 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Widget _buildPhotoSection(String title, dynamic photoData) {
+    print("Photo data: $photoData");
+
     List<dynamic> photos = (photoData is List) ? photoData : [];
 
     return Column(
@@ -571,7 +577,7 @@ class _UserScreenState extends State<UserScreen> {
                             ? aboutmeWidget(userData)
                             : _selectedTabIndex == 1
                             ? moreaboutmeWidget(userData)
-                            : Center(child: Expectationchart());
+                            : Center(child: ExpectationChart(userId: 'BXiLpmj4WJv82yRLdy9R',));
 
                       } else {
                         return Center(child: Text('No data available'));
