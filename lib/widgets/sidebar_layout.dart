@@ -1,7 +1,6 @@
 import 'package:dashboard_my_mate/Homepages/home_screen.dart';
 import 'package:dashboard_my_mate/MymateThemes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../Homepages/manage_user.dart';
 

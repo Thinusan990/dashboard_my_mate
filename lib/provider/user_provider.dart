@@ -23,12 +23,10 @@ class UserProvider extends ChangeNotifier{
 
     switch (_user!.role) {
       case UserRole.superAdmin:
-        return true; // Full access
+        return true;
       case UserRole.admin:
-      // Define admin permissions
         return ['add', 'changeType', 'view'].contains(permission);
       case UserRole.manager:
-      // Define manager permissions
         return ['view'].contains(permission);
       default:
         return false;

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:dashboard_my_mate/Homepages/user_screen.dart';
+import 'package:dashboard_my_mate/provider/user_provider.dart';
 import 'package:dashboard_my_mate/widgets/sidebar_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../MymateThemes.dart';
 import '../dbconnection/firebase.dart';
 import '../widgets/subscriberschart.dart';
@@ -149,6 +151,7 @@ class _ManageUsersState extends State<ManageUsers> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -340,7 +343,10 @@ class _ManageUsersState extends State<ManageUsers> {
                                           BorderRadius.circular(width * 0.003),
                                     ),
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: userProvider.hasPermission("add")
+                                        ? () {
+                                      }
+                                      :null,
                                       child: Text('+ Add New User',
                                           style: TextStyle(
                                               color: Colors.white,
@@ -369,24 +375,25 @@ class _ManageUsersState extends State<ManageUsers> {
                                       BorderRadius.circular(width * 0.002),
                                 ),
                                 child: ElevatedButton(
-                                  onPressed: selectedRows.isNotEmpty
+                                  onPressed: selectedRows.isNotEmpty && 
+                                    userProvider.hasPermission("delete")
                                       ? () {
                                           // Your delete action here
                                         }
                                       : null,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: selectedRows.isNotEmpty
+                                    backgroundColor: selectedRows.isNotEmpty &&
+                                        userProvider.hasPermission("delete")
                                         ? Colors.white
                                         : Mymatethemes.commonbuttonclr,
-                                    foregroundColor: selectedRows.isNotEmpty
+                                    foregroundColor: selectedRows.isNotEmpty &&
+                                        userProvider.hasPermission("delete")
                                         ? Colors.black
                                         : Colors.black.withOpacity(0.2),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            width * 0.002)),
+                                        borderRadius: BorderRadius.circular(width * 0.002)),
                                     padding: EdgeInsets.symmetric(
-                                        vertical: 0.0,
-                                        horizontal: width * 0.01),
+                                        vertical: 0.0, horizontal: width * 0.01),
                                   ),
                                   child: Text(
                                     'Delete',
@@ -466,36 +473,36 @@ class _ManageUsersState extends State<ManageUsers> {
                                 decoration: BoxDecoration(
                                   border: selectedRows.isNotEmpty
                                       ? Border.all(
-                                          color: Colors.grey.shade300,
-                                          width: 1.0,
-                                        )
+                                    color: Colors.grey.shade300,
+                                    width: 1.0,
+                                  )
                                       : null,
-                                  color: selectedRows.isNotEmpty
+                                  color: selectedRows.isNotEmpty &&
+                                      userProvider.hasPermission("changeType")
                                       ? Mymatethemes.commonbuttonclr
                                       : Colors.grey.shade300,
-                                  borderRadius:
-                                      BorderRadius.circular(width * 0.002),
+                                  borderRadius: BorderRadius.circular(width * 0.002),
                                 ),
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: width * 0.01,
-                                    vertical: height * 0.002),
+                                    horizontal: width * 0.01, vertical: height * 0.002),
                                 child: DropdownButton<String>(
                                   hint: Text(
                                     "Change Status",
                                     style: TextStyle(
                                         fontSize: width * 0.0085,
-                                        color: selectedRows.isNotEmpty
+                                        color: selectedRows.isNotEmpty &&
+                                            userProvider.hasPermission("changeType")
                                             ? Colors.black
                                             : Colors.grey),
                                   ),
                                   underline: SizedBox(),
-                                  onChanged: selectedRows.isNotEmpty
+                                  onChanged: selectedRows.isNotEmpty &&
+                                      userProvider.hasPermission("changeType")
                                       ? (value) async {
-                                          if (value != null) {
-                                            await _updateUserStatus(
-                                                selectedRows, value);
-                                          }
-                                        }
+                                    if (value != null) {
+                                      await _updateUserStatus(selectedRows, value);
+                                    }
+                                  }
                                       : null,
                                   items: [
                                     "Basic",
